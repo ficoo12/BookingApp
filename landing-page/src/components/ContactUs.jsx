@@ -1,12 +1,13 @@
 import { useState } from "react";
 
 const contactUs = () => {
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [text, setText] = useState();
 
-  const sendMessage = async () => {
+  const sendMessage = async (e) => {
+    e.preventDefault();
     if (!name || !email || !message) {
       setText("Please enter all informations");
       return;
@@ -25,9 +26,15 @@ const contactUs = () => {
       });
       const result = await response.json();
       if (response.ok) {
-        setText(result.message);
+        setText("Poruka upsiješno poslana, odgovor će te dobiti na email!");
+        setName("");
+        setEmail("");
+        setMessage("");
+        e.target.name.value = "";
+        e.target.email.value = "";
+        e.target.message.value = "";
       } else {
-        setText(result.error || "Booking failed.");
+        setText(result.error || "Poruka nije poslana");
       }
     } catch (error) {
       console.error(error);
@@ -36,7 +43,7 @@ const contactUs = () => {
   };
 
   return (
-    <section className="body-font relative  text-gray-400 bg-sky-400 mx-auto mt-20 rounded-xl">
+    <section className="body-font relative  text-gray-400  mx-auto mt-20 rounded-xl">
       <div className="container mx-auto px-20 py-10">
         <div className="mb-12 flex w-full flex-col text-center">
           <h1 className="title-font mb-4 text-2xl font-bold text-slate-800 sm:text-5xl">
@@ -49,7 +56,11 @@ const contactUs = () => {
         </div>
 
         <div className="mx-auto md:w-2/3 lg:w-1/2">
-          <div className="-m-2 flex flex-wrap">
+          <form
+            onSubmit={sendMessage}
+            className="-m-2 flex flex-wrap"
+            autoComplete="off"
+          >
             <div className="w-1/2 p-2">
               <div className="relative">
                 <input
@@ -61,7 +72,7 @@ const contactUs = () => {
                   onChange={(e) => setName(e.target.value)}
                 />
                 <label
-                  for="name"
+                  htmlFor="name"
                   className="absolute left-3 -top-6 bg-transparent text-sm leading-7 text-indigo-500 transition-all peer-placeholder-shown:left-3 peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:left-3 peer-focus:-top-6 peer-focus:text-sm peer-focus:text-slate-800"
                 >
                   Name
@@ -79,7 +90,7 @@ const contactUs = () => {
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 <label
-                  for="name"
+                  htmlFor="name"
                   className="absolute left-3 -top-6 bg-transparent text-sm leading-7 text-indigo-500 transition-all peer-placeholder-shown:left-3 peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:left-3 peer-focus:-top-6 peer-focus:text-sm peer-focus:text-slate-800"
                 >
                   Email
@@ -96,22 +107,20 @@ const contactUs = () => {
                   onChange={(e) => setMessage(e.target.value)}
                 ></textarea>
                 <label
-                  for="message"
+                  htmlFor="message"
                   className="absolute left-3 -top-6 bg-transparent text-sm leading-7 text-indigo-500 transition-all peer-placeholder-shown:left-3 peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:left-3 peer-focus:-top-6 peer-focus:text-sm peer-focus:text-slate-800"
                 >
                   Message
                 </label>
               </div>
             </div>
-            <div class="w-full p-2">
-              <button
-                onClick={sendMessage}
-                className="px-10 py-2 rounded-lg bg-orange-300 text-slate-800 font-medium text-2xl hover:cursor-pointer hover:bg-orange-400"
-              >
+            <div className="w-full p-2">
+              <button className="px-10 py-2 rounded-lg bg-orange-300 text-slate-800 font-medium text-2xl hover:cursor-pointer hover:bg-orange-400">
                 Button
               </button>
+              <p className="text-green-600">{text}</p>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </section>

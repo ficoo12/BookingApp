@@ -43,10 +43,6 @@ const ApartmentsForm = () => {
   }
 
   function onPicturesChangeHandler(e) {
-    // const files = Array.from(e.target.files).map((file) => file.name);
-    // const filesPath = files.map((file) => "/uploads/" + file);
-    // console.log(filesPath);
-    // setPictures(filesPath);
     setPictures(e.target.files);
   }
 
@@ -126,10 +122,10 @@ const ApartmentsForm = () => {
     >
       <div className="container max-w-screen-lg mx-auto">
         <div>
-          <h2 class="font-semibold text-xl text-gray-600">
+          <h2 className="font-semibold text-xl text-gray-600">
             Dodajte novi apartman
           </h2>
-          <p class="text-gray-500 mb-6">
+          <p className="text-gray-500 mb-6">
             Popunite sve informacije kako bi mogli dodati još jedan apartman za
             svoj objekt.
           </p>
@@ -220,7 +216,7 @@ const ApartmentsForm = () => {
                   Pogled na prirodu
                 </label>
               </div>
-              <p class="text-black">
+              <p className="text-black">
                 Selektirane značajke: {JSON.stringify(features)}
               </p>
             </div>

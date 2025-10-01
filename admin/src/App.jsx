@@ -10,6 +10,7 @@ import EditApartments from "./components/pages/EditApartments";
 import Reservations from "./components/pages/Reservations";
 import Login, { action as loginAction } from "./components/pages/Login";
 import { action as logoutAction } from "./components/Logout";
+import GuestMessages from "./components/GuestMessages";
 
 function App() {
   const router = createBrowserRouter([
@@ -50,6 +51,11 @@ function App() {
         {
           path: "/reservations",
           element: <Reservations />,
+          loader: checkLoginLoader,
+        },
+        {
+          path: "/messages",
+          element: <GuestMessages />,
           loader: checkLoginLoader,
         },
       ],
