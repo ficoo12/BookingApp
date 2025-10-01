@@ -1,0 +1,52 @@
+@import "tailwindcss";
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+body {
+  background-color: #f4ede1;
+  color: #222;
+}
+.ctaBtn {
+  @apply px-5 py-2 rounded-lg bg-sky-400 text-white font-medium text-2xl hover:cursor-pointer hover:bg-sky-500;
+}
+.paragraphText {
+  color: #444;
+}
+.secondaryCta {
+  @apply px-5 py-2 rounded-lg bg-sky-400 text-white font-medium text-2xl hover:cursor-pointer hover:bg-sky-500;
+}
+.emphasized {
+  @apply text-sky-500;
+}
+.AboutUsImg {
+  animation: UnscaleImage 0.3s ease-in forwards;
+}
+.AboutUsImg:hover {
+  animation: ImageAnimation 0.3s ease-in forwards;
+}
+@keyframes ImageAnimation {
+  from {
+    scale: 100%;
+  }
+  to {
+    scale: 120%;
+  }
+}
+@keyframes UnscaleImage {
+  from {
+    scale: 120%;
+  }
+  to {
+    scale: 100%;
+  }
+}
