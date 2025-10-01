@@ -50,9 +50,7 @@ main()
 
 //process.env.DB_URL
 async function main() {
-  await mongoose.connect(
-    "mongodb+srv://User02:Password0123@cluster0.k8phx.mongodb.net/BookingApp?retryWrites=true&w=majority&appName=Cluster0"
-  );
+  await mongoose.connect(process.env.DB_URL);
 
   app.use("/", (req, res) => {
     res.send("DB server is working");
