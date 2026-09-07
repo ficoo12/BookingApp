@@ -4,6 +4,7 @@ import RootLayout from "./components/UI/RootLayout";
 import FindingApartments from "./components/FindingApartments";
 import AboutApartment from "./components/AboutApartment";
 import PaymentPage from "./components/PaymentPage";
+import ConfirmationPage from "./components/ConfirmationPage";
 function App() {
   const router = createBrowserRouter([
     {
@@ -22,6 +23,10 @@ function App() {
         {
           path: "/payment/:id",
           element: <PaymentPage />,
+        },
+        {
+          path: "/confirmation",
+          element: <ConfirmationPage />,
         },
       ],
     },

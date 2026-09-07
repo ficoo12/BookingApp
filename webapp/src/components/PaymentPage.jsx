@@ -1,52 +1,66 @@
-import { Link, useParams, useLocation, Navigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   ChevronLeftIcon,
   UserIcon,
   BanknotesIcon,
 } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
-import { differenceInDays } from "date-fns";
+import { format } from "date-fns";
+import { useSearchCriteria } from "../hooks/useSearchCriteria";
+
 const PaymentPage = () => {
-  const { state } = useLocation();
   const [guestName, setGuestName] = useState("");
   const [guestEmail, setGuestEmail] = useState("");
   const [guestPhone, setGuestPhone] = useState("");
   const [message, setMessage] = useState("");
   const [apartmentData, setApartmentData] = useState([]);
+  const [totalPrice, setTotalPrice] = useState();
 
   const params = useParams();
+  const navigate = useNavigate();
+  const { startDate, endDate, guests, query } = useSearchCriteria();
 
-  const { dateRange, guests, totalPrice } = state;
-  const startDate = new Date(dateRange.startDate).toISOString();
-  const endDate = new Date(dateRange.endDate).toISOString();
-  const totalNights =
-    startDate && endDate ? differenceInDays(endDate, startDate) : 0;
-  console.log(dateRange);
-  console.log(guests);
-  console.log(typeof totalPrice);
-
-  console.log(dateRange, guests, totalPrice);
   useEffect(() => {
     const fetchApartmentData = async () => {
       const response = await fetch(
         `http://localhost:8080/api/apartments/${params.id}`
       );
       const apartmentData = await response.json();
-      console.log(apartmentData);
       setApartmentData(apartmentData);
     };
     fetchApartmentData();
   }, [params.id]);
+
+  useEffect(() => {
+    if (!apartmentData[0]?.priceList_id) {
+      return;
+    }
+    const getTheTotalPrice = async () => {
+      const response = await fetch(
+        `http://localhost:8080/api/priceList/${apartmentData[0]?.priceList_id}/quote`,
+        {
+          method: "POST",
+          body: JSON.stringify({ startDate, endDate }),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      if (response.ok) {
+        const totalPriceResponse = await response.json();
+        setTotalPrice(totalPriceResponse.totalPrice);
+      } else {
+        console.error(response.body);
+      }
+    };
+
+    getTheTotalPrice();
+  }, [apartmentData[0]?.priceList_id, startDate, endDate]);
 
   const makeReservation = async () => {
     if (!guestName || !guestEmail || !guestPhone) {
       setMessage("Please enter all guest details.");
       return;
     }
-    const startDate = new Date(dateRange.startDate).toISOString();
-    const endDate = new Date(dateRange.endDate).toISOString();
-    const totalNights =
-      startDate && endDate ? differenceInDays(endDate, startDate) : 0;
     try {
       const response = await fetch(`http://localhost:8080/api/reservations`, {
         method: "POST",
@@ -59,14 +73,22 @@ const PaymentPage = () => {
           guestEmail,
           guestPhoneNumber: guestPhone,
           numberOfGuests: guests,
-          startDate,
-          endDate,
-          totalPrice: totalPrice,
+          startDate: startDate.toISOString(),
+          endDate: endDate.toISOString(),
+          totalPrice,
         }),
       });
       const result = await response.json();
       if (response.ok) {
-        setMessage(result.message);
+        navigate("/confirmation", {
+          state: {
+            apartmentName: apartmentData[0]?.name,
+            apartmentPhoto: apartmentData[0]?.pictures?.[0],
+            totalPrice,
+            guestName,
+            guestEmail,
+          },
+        });
       } else {
         setMessage(result.error || "Booking failed.");
       }
@@ -79,7 +101,7 @@ const PaymentPage = () => {
   return (
     <div className="">
       <div className="flex items-center gap-4">
-        <Link to={`/more-info/${params.id}`}>
+        <Link to={`/more-info/${params.id}?${query}`}>
           <ChevronLeftIcon className="w-8 h-auto text-black"></ChevronLeftIcon>
         </Link>
         <h1 className="text-3xl font-bold">Potvrdite svoju rezervaciju</h1>
@@ -91,7 +113,10 @@ const PaymentPage = () => {
           ) : (
             apartmentData.map((apartment) => {
               return (
-                <div className="max-w-96 bg-white border border-slate-300 rounded-lg px-4 py-4">
+                <div
+                  key={apartment._id}
+                  className="max-w-96 bg-white border border-slate-300 rounded-lg px-4 py-4"
+                >
                   <div className="flex items-center gap-4">
                     <img
                       className="w-36 h-auto rounded-lg"
@@ -105,9 +130,6 @@ const PaymentPage = () => {
                   <div>
                     <p className="text-2xl font-bold mt-4">Price details</p>
                     <div className="flex justify-between mt-5">
-                      <p className="underline">
-                        {apartment.price[0]}$ X {totalNights} noći
-                      </p>
                       <p>{totalPrice}$</p>
                     </div>
                     <div className="w-full h-0.5 bg-gray-400 rounded-lg mt-3"></div>
@@ -126,20 +148,15 @@ const PaymentPage = () => {
               <p className="text-xl font-medium">Dates</p>
               <div>
                 <p>
-                  {dateRange?.startDate
-                    ? new Date(dateRange.startDate).toLocaleDateString()
-                    : "Not available"}{" "}
-                  -{" "}
-                  {dateRange?.endDate
-                    ? new Date(dateRange.endDate).toLocaleDateString()
-                    : "Not available"}
+                  {format(startDate, "dd.MM.yyyy.")} -{" "}
+                  {format(endDate, "dd.MM.yyyy.")}
                 </p>
               </div>
             </div>
             <div className="flex justify-between">
               <p className="text-xl font-medium">Guests</p>
               <div className="flex items-center gap-2">
-                <p>{guests || "Not available"}</p>
+                <p>{guests}</p>
                 <UserIcon className="w-6"></UserIcon>
               </div>
             </div>

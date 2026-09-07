@@ -1,10 +1,16 @@
 import { redirect } from "react-router-dom";
+import { queryClient } from "../utility/queryClient";
+import { logout } from "../utility/api";
+import { clearSession, getRefreshToken } from "../utility/session";
 
-export function action() {
-  localStorage.removeItem("access_token");
-  localStorage.removeItem("access_token_duration");
-  localStorage.removeItem("refresh_token");
-  localStorage.removeItem("refresh_token_duration");
-
-  return redirect("/");
+export async function action() {
+  const refreshToken = getRefreshToken();
+  try {
+    if (refreshToken) await logout(refreshToken);
+  } catch {
+    // Server-side cleanup failed; log out locally anyway.
+  }
+  clearSession();
+  queryClient.clear();
+  return redirect("/login");
 }

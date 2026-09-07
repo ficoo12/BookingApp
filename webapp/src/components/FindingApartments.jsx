@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { DateRangePicker } from "react-date-range";
 import { format } from "date-fns";
@@ -6,25 +6,28 @@ import { CalendarDateRangeIcon, UserIcon } from "@heroicons/react/24/solid";
 import LOGO from "../assets/LOGO.svg";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import Carousel from "./carousel";
+import Carousel from "./Carousel";
+import { useSearchCriteria } from "../hooks/useSearchCriteria";
+
 const FindingApartments = () => {
   const navigate = useNavigate();
+  const { startDate, endDate, guests, setCriteria, query, isSearchActive } =
+    useSearchCriteria();
+
+  // Ostaje lokalno: čisto UI stanje, nema smisla u URL-u.
   const [openDateRange, setOpenDateRange] = useState(false);
-  const [dateRange, setDateRange] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
-    key: "selection",
-  });
-  const [guests, setGuests] = useState(1);
-  const [apartments, setApartments] = useState([]);
   const [openGuests, setOpenGuests] = useState(false);
+  const [apartments, setApartments] = useState([]);
+
+  const dateRange = { startDate, endDate, key: "selection" };
 
   const handleClickGuests = () => {
     setOpenGuests((prev) => !prev);
   };
 
+  // replace: true -> pomicanje po kalendaru ne stvara novi history unos
   const handleChange = (ranges) => {
-    setDateRange(ranges.selection);
+    setCriteria(ranges.selection);
   };
 
   const handleClickDate = () => {
@@ -32,41 +35,56 @@ const FindingApartments = () => {
   };
 
   const setGuestsHandler = (e) => {
-    setGuests(Number(e.target.value));
+    setCriteria({ guests: Number(e.target.value) });
+  };
+
+  // replace: false -> Search gura novi history unos,
+  // pa "back" vraća na prethodnu pretragu.
+  const findApartments = () => {
+    setCriteria({ startDate, endDate, guests }, { replace: false });
   };
 
   const goToMoreInfoHandler = (id) => {
-    navigate(`/more-info/${id}`, { state: { dateRange, guests } });
+    navigate(`/more-info/${id}?${query}`);
   };
 
-  const findApartments = async () => {
-    const startDate = dateRange.startDate.toISOString();
-    const endDate = dateRange.endDate.toISOString();
+  // Dohvat ovisi o URL-u, ne o kliku na gumb.
+  // Zato se rezultati vrate i kad korisnik dođe natrag na ovu rutu.
+  useEffect(() => {
+    if (!isSearchActive) return;
 
-    try {
-      const response = await fetch(
-        `http://localhost:8080/api/apartments/available?startDate=${startDate}&endDate=${endDate}&guests=${guests}`
-      );
+    const controller = new AbortController();
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch apartments");
+    const fetchApartments = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/api/apartments/available?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}&guests=${guests}`,
+          { signal: controller.signal }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch apartments");
+        }
+
+        const data = await response.json();
+        setApartments(data);
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          console.error("Error fetching apartments:", error);
+        }
       }
+    };
 
-      const data = await response.json();
-      setApartments(data);
-    } catch (error) {
-      console.error("Error fetching apartments:", error);
-    }
-  };
+    fetchApartments();
+
+    return () => controller.abort();
+  }, [startDate, endDate, guests, isSearchActive]);
 
   return (
     <div>
       <div className="bg-sky-600 py-10 px-5">
         <nav className="flex justify-between items-center pb-10">
           <img className="w-15 h-auto" src={LOGO}></img>
-          <a className="bg-amber-500 text-slate-800 font-bold rounded-sm px-5 py-3 text-lg hover:bg-amber-600 hover:cursor-pointer">
-            Contact us
-          </a>
         </nav>
 
         <div className="container mx-auto">
@@ -83,15 +101,9 @@ const FindingApartments = () => {
                 className="flex gap-2 items-center text-black bg-white rounded-lg text-lg py-4 px-4 hover:cursor-pointer hover:border-blue-400 border relative"
               >
                 <CalendarDateRangeIcon className="w-8 h-auto text-black " />
-                <button>{`${format(
-                  dateRange.startDate,
-                  "MMM dd, yyyy"
-                )}`}</button>
+                <button>{`${format(startDate, "MMM dd, yyyy")}`}</button>
                 <span>-</span>
-                <button>{`${format(
-                  dateRange.endDate,
-                  "MMM dd, yyyy"
-                )}`}</button>
+                <button>{`${format(endDate, "MMM dd, yyyy")}`}</button>
               </div>
               {openDateRange && (
                 <DateRangePicker
@@ -154,23 +166,19 @@ const FindingApartments = () => {
             >
               <div className="max-w-96 h-auto object-cover object-center rounded-lg">
                 <Carousel autoSlide={true}>
-                  {[
-                    ...apartment.pictures.map((picture) => (
-                      <img
-                        className="rounded-lg"
-                        src={`http://localhost:8080/${picture}`}
-                      ></img>
-                    )),
-                  ]}
+                  {apartment.pictures.map((picture) => (
+                    <img
+                      key={picture}
+                      className="rounded-lg"
+                      src={`http://localhost:8080/${picture}`}
+                    ></img>
+                  ))}
                 </Carousel>
               </div>
 
               <h4 className="text-3xl font-semibold mt-4">{apartment.name}</h4>
               <p className="text-gray-500">
                 Maks broj gostiju: {apartment.guests}
-              </p>
-              <p className="text-gray-500 mb-5">
-                Price: ${apartment.price} per night
               </p>
               <button
                 onClick={() => goToMoreInfoHandler(apartment._id)}

@@ -37,12 +37,14 @@ const apartmentsRouter = require("./apartments/apartments.route");
 const reservationsRoutes = require("./reservations/reservations.route");
 const loginoutRoutes = require("./login-out/user.route");
 const contactRoutes = require("./contact/contact.route");
+const priceListRoutes = require("./priceList/pricelist.route");
 
 app.use("/api/apartments", apartmentsRouter);
 app.use("/api/reservations", reservationsRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/user", loginoutRoutes);
 app.use("/api/contact", contactRoutes);
+app.use("/api/pricelist", priceListRoutes);
 
 main()
   .then(() => console.log("Mongodb connect successfully!"))

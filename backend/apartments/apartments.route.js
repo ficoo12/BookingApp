@@ -10,6 +10,7 @@ const {
   updateApartment,
   deleteAparment,
   availableApartments,
+  deleteApartmentImages,
 } = require("./apartments.controller.js");
 
 const router = express.Router();
@@ -30,5 +31,6 @@ router.patch(
 );
 
 router.delete("/:id", verifyToken, deleteAparment);
+router.delete("/images/:id", verifyToken, deleteApartmentImages);
 
 module.exports = router;

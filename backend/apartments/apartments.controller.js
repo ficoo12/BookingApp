@@ -164,6 +164,34 @@ const deleteAparment = async (req, res) => {
   }
 };
 
+const deleteApartmentImages = async (req, res) => {
+  try {
+    const user_id = req.user.sub;
+    const apartment_id = req.params.id;
+    const apartment = await Apartments.findOne({ _id: apartment_id, user_id });
+    const newFilesArray = apartment.pictures.filter(
+      (picture) => !req.body.includes(picture)
+    );
+
+    const updatedApartment = await Apartments.findByIdAndUpdate(
+      apartment_id,
+      { pictures: newFilesArray },
+      { new: true }
+    );
+    if (!updatedApartment) {
+      res.status(404).send({ message: "error in the backend." });
+      return;
+    }
+    res.status(200).send({
+      message: "Fotografije su uspiješno obrisane",
+      apartment: updatedApartment,
+    });
+  } catch (error) {
+    console.error("Error deleting images", error);
+    res.status(500).send({ message: "Failed to delete images" });
+  }
+};
+
 module.exports = {
   getAllApartments,
   createApartments,
@@ -171,4 +199,5 @@ module.exports = {
   updateApartment,
   deleteAparment,
   availableApartments,
+  deleteApartmentImages,
 };

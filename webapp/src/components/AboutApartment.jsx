@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { format, differenceInDays } from "date-fns";
 import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
@@ -11,57 +11,69 @@ import {
   UserIcon,
   XMarkIcon,
 } from "@heroicons/react/24/solid";
+import { useSearchCriteria } from "../hooks/useSearchCriteria";
 
 const AboutApartment = () => {
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
-  const dateRange = location.state?.dateRange || {};
-  const startDate = dateRange.startDate ? new Date(dateRange.startDate) : null;
-  const endDate = dateRange.endDate ? new Date(dateRange.endDate) : null;
+  const { startDate, endDate, guests, query } = useSearchCriteria();
 
-  const formattedStartDate = startDate
-    ? format(startDate, "MMM dd, yyyy")
-    : "No date provided";
+  const formattedStartDate = format(startDate, "MMM dd, yyyy");
+  const formattedEndDate = format(endDate, "MMM dd, yyyy");
+  const totalNights = differenceInDays(endDate, startDate);
 
-  const formattedEndDate = endDate
-    ? format(endDate, "MMM dd, yyyy")
-    : "No date provided";
-
-  const totalNights =
-    startDate && endDate ? differenceInDays(endDate, startDate) : 0;
-
-  console.log(totalNights);
-  console.log(typeof totalNights);
-  const guests = location.state?.guests || [0];
   const [sliderRef, instanceRef] = useKeenSlider({
     loop: true,
     slides: { perView: 1 },
   });
   const [apartmentData, setApartmentData] = useState([]);
-  const params = useParams();
+  const [totalPrice, setTotalPrice] = useState();
 
+  const params = useParams();
+  console.log(apartmentData);
   useEffect(() => {
     const fetchApartmentData = async () => {
       const response = await fetch(
         `http://localhost:8080/api/apartments/${params.id}`
       );
       const apartmentData = await response.json();
-      console.log(apartmentData);
       setApartmentData(apartmentData);
     };
     fetchApartmentData();
   }, [params.id]);
 
-  const pricePerNight = apartmentData.length > 0 ? apartmentData[0]?.price : 0;
+  useEffect(() => {
+    if (!apartmentData[0]?.priceList_id) {
+      return;
+    }
+    const getTheTotalPrice = async () => {
+      const response = await fetch(
+        `http://localhost:8080/api/priceList/${apartmentData[0]?.priceList_id}/quote`,
+        {
+          method: "POST",
+          body: JSON.stringify({ startDate, endDate }),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      if (response.ok) {
+        const totalPriceResponse = await response.json();
+        setTotalPrice(totalPriceResponse.totalPrice);
+      } else {
+        console.error(response.body);
+      }
+    };
+
+    getTheTotalPrice();
+  }, [apartmentData[0]?.priceList_id, startDate, endDate]);
+  console.log(totalPrice);
   const partOfDescription =
     apartmentData.length > 0
       ? apartmentData[0].desc.slice(0, 300)
       : "no text provided";
-  const totalPrice = totalNights * pricePerNight;
 
   const goToPaymentHandler = (id) => {
-    navigate(`/payment/${id}`, { state: { dateRange, guests, totalPrice } });
+    navigate(`/payment/${id}?${query}`);
   };
 
   const toggleModal = () => {
@@ -71,7 +83,7 @@ const AboutApartment = () => {
   return (
     <div>
       <nav className="flex justify-between px-3 py-3 bg-white">
-        <Link to="/">
+        <Link to={`/?${query}`}>
           <ChevronLeftIcon className="w-8 h-auto"></ChevronLeftIcon>
         </Link>
         <ShareIcon className="w-8 h-auto"></ShareIcon>
@@ -125,7 +137,11 @@ const AboutApartment = () => {
                     <p className="text-lg mb-2">Značajke apartmana:</p>
                     <div className="space-y-2 font-bold">
                       {apartment.features.map((feature) => {
-                        return <p className="text-lg">{feature}</p>;
+                        return (
+                          <p key={feature} className="text-lg">
+                            {feature}
+                          </p>
+                        );
                       })}
                     </div>
                   </div>
@@ -155,12 +171,6 @@ const AboutApartment = () => {
                     <p>Imate sreće! Ovaj apartman je često rezerviran</p>
                   </div>
                   <div>
-                    <p className="mt-3">
-                      <span className="text-black text-2xl font-bold">
-                        $ {apartment.price[0]}
-                      </span>{" "}
-                      <span className="text-xl">noć</span>
-                    </p>
                     <div className="flex justify-between mt-3">
                       <div>
                         <p className="uppercase font-bold">Check-in</p>
@@ -182,12 +192,6 @@ const AboutApartment = () => {
                       Napravi razervaciju
                     </button>
                     <p>You won't be charged yet</p>
-                  </div>
-                  <div className="flex justify-between mt-5">
-                    <p className="underline">
-                      {apartment.price[0]}$ X {totalNights} noći
-                    </p>
-                    <p>{totalPrice}$</p>
                   </div>
                   <div className="w-full h-0.5 bg-gray-400 rounded-lg mt-3"></div>
                   <div className="flex justify-between items-center mt-3">

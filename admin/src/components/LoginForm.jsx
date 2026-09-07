@@ -9,13 +9,15 @@ function Login() {
   return (
     <div className="container max-w-screen-sm mx-auto mt-20">
       <div>
-        <h2 className="font-semibold text-xl text-gray-600">Login form</h2>
-        <p className="text-gray-500 mb-6">
+        <h2 className="font-semibold text-xl text-gray-600 dark:text-gray-300">
+          Login form
+        </h2>
+        <p className="text-gray-500 mb-6 dark:text-gray-400">
           Ulogirajte se kako bi mogli upravljati svojim objektom
         </p>
         <Form
           method="POST"
-          className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 space-y-5"
+          className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 space-y-5 dark:bg-gray-800 dark:shadow-black/40"
           autoComplete="off"
         >
           {data && data.errors && (
@@ -27,9 +29,9 @@ function Login() {
           )}
           {data && data.message && <p>{data.message}</p>}
           <div className="md:col-span-5">
-            <label className=" text-black">Username</label>
+            <label className=" text-black dark:text-gray-200">Username</label>
             <input
-              className="h-10 border border-gray-200 mt-1 rounded px-4 w-full bg-gray-50 text-gray-400"
+              className="h-10 border border-gray-200 mt-1 rounded px-4 w-full bg-gray-50 text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
               type="text"
               name="username"
               placeholder="Mmarkic"
@@ -37,9 +39,9 @@ function Login() {
             ></input>
           </div>
           <div className="md:col-span-5">
-            <label className=" text-black">Password</label>
+            <label className=" text-black dark:text-gray-200">Password</label>
             <input
-              className="h-10 border border-gray-200 mt-1 rounded px-4 w-full bg-gray-50 text-gray-400"
+              className="h-10 border border-gray-200 mt-1 rounded px-4 w-full bg-gray-50 text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
               type="password"
               name="password"
               placeholder="type password"
@@ -48,7 +50,7 @@ function Login() {
           </div>
           <button
             disabled={isSubmitting}
-            className="bg-sky-600 text-white px-6 py-4 rounded-lg text-md hover:bg-sky-900"
+            className="bg-sky-600 text-white px-6 py-4 rounded-lg text-md hover:bg-sky-900 dark:bg-sky-700 dark:hover:bg-sky-800"
           >
             {isSubmitting ? "U tijeku" : "Login"}
           </button>

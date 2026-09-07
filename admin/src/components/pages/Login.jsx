@@ -1,5 +1,7 @@
 import { redirect } from "react-router-dom";
 import LoginForm from "../LoginForm";
+import { BASE_URL } from "../../utility/config";
+import { saveSession } from "../../utility/session";
 
 const Login = () => {
   return <LoginForm />;
@@ -15,7 +17,7 @@ export async function action({ request }) {
     password: data.get("password"),
   };
 
-  const link = "http://localhost:8080/api/user/login";
+  const link = `${BASE_URL}/api/user/login`;
 
   const response = await fetch(link, {
     method: "POST",
@@ -34,24 +36,7 @@ export async function action({ request }) {
   }
 
   const responseData = await response.json();
-  const accessToken = responseData.access_token;
-  const refreshToken = responseData.refresh_token;
-
-  const accessTokenDuration = new Date();
-  accessTokenDuration.setMinutes(accessTokenDuration.getMinutes() + 5);
-  const refreshTokenDuration = new Date();
-  refreshTokenDuration.setHours(refreshTokenDuration.getHours() + 120);
-
-  localStorage.setItem("access_token", accessToken);
-  localStorage.setItem(
-    "access_token_duration",
-    accessTokenDuration.toISOString()
-  );
-  localStorage.setItem("refresh_token", refreshToken);
-  localStorage.setItem(
-    "refresh_token_duration",
-    refreshTokenDuration.toISOString()
-  );
+  saveSession(responseData);
 
   return redirect("/");
 }

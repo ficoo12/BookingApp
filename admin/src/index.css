@@ -1,12 +1,18 @@
 @import "tailwindcss";
+
+/* Tailwind v4 removed the `darkMode: "class"` config option -- `dark:` follows
+   the OS setting unless a custom variant redefines it. This points it at the
+   class ThemeProvider toggles on <html> instead. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: #242424;
-  background-color: rgba(255, 255, 255, 0.87);
+  /* Not `light dark`: that hands the choice back to the OS and would leave
+     form controls and scrollbars out of step with an explicit toggle. */
+  color-scheme: light;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -14,8 +20,16 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ThemeProvider puts the class on <html>, which is :root itself. */
+:root.dark {
+  color-scheme: dark;
+}
+
+/* The page background lives here rather than on a layout component because the
+   login branch renders without one. */
 body {
   margin: 0 auto;
+  @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100;
 }
 
 h1 {

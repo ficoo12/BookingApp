@@ -1,5 +1,9 @@
 const Reservations = require("./reservations.model");
 const Apartment = require("../apartments/apartments.model");
+const PriceList = require("../priceList/pricelist.model");
+const {
+  calculateTotalPrice,
+} = require("../helperfunction/calculateTotalPrice");
 
 const isAvailable = (apartment, startDate, endDate) => {
   return !apartment.bookedDates.some(
@@ -41,25 +45,32 @@ const addReservation = async (req, res) => {
     }
 
     const apartment = await Apartment.findById(apartmentId);
+
     if (!apartment)
       return res.status(404).json({ error: "Apartment not found" });
-
-    const pricePerNight = Array.isArray(apartment.price)
-      ? apartment.price[0]
-      : apartment.price;
-    if (!pricePerNight) {
-      return res.status(500).json({ error: "Invalid apartment price data" });
-    }
 
     if (!isAvailable(apartment, parsedStart, parsedEnd)) {
       return res.status(400).json({ error: "Apartment not available" });
     }
 
-    const nights = Math.ceil((parsedEnd - parsedStart) / (1000 * 60 * 60 * 24));
-    const totalPrice = nights * pricePerNight;
+    if (!apartment.priceList_id) {
+      return res
+        .status(400)
+        .json({ error: "Apartment has no price list assigned" });
+    }
 
-    if (isNaN(totalPrice) || totalPrice <= 0) {
-      return res.status(500).json({ error: "Error calculating total price" });
+    const priceList = await PriceList.findById(apartment.priceList_id);
+
+    if (!priceList) {
+      return res.status(400).json({ error: "Price list not found" });
+    }
+
+    let totalPrice = calculateTotalPrice(priceList, parsedStart, parsedEnd);
+
+    if (totalPrice === null) {
+      return res.status(400).json({
+        error: "No price period covers the selected dates",
+      });
     }
 
     const newReservation = await Reservations.create({
@@ -106,7 +117,9 @@ const getSingleReservation = async (req, res) => {
       res.status(404).send({
         message: "Reservation not Found!",
       });
+      return;
     }
+    res.status(200).send(reservation);
   } catch (error) {
     console.error("Error fetching reservation", error);
     res.status(500).send({ message: "Failed to fetch reservation" });

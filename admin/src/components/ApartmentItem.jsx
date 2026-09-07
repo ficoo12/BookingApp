@@ -1,74 +1,67 @@
-import { useContext } from "react";
-import { ApartmentsContext } from "../store/apartments-context";
 import Card from "./UI/Card";
 import { Link } from "react-router-dom";
+import { deleteApartment } from "../utility/api";
+import { BASE_URL } from "../utility/config";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "../utility/queryKeys";
 
 const ApartmentItem = ({ apartment }) => {
-  const { onDeleteApartments } = useContext(ApartmentsContext);
+  const queryClient = useQueryClient();
 
-  const deleteData = async (_id) => {
-    const token = localStorage.getItem("access_token");
-    const response = await fetch(
-      "http://localhost:8080/api/apartments/" + _id,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      }
-    );
-    if (response.ok) return await response.json();
-    else throw new Error("error");
-  };
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationFn: deleteApartment,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.apartments.all });
+    },
+  });
+
   function onDeleteHandler() {
-    deleteData(apartment._id)
-      .then((data) => {
-        if (data.rows === 1) {
-          onDeleteApartments(apartment._id);
-        }
-      })
-      .catch((err) => console.error(err));
-  }
-
-  if (!apartment || !apartment.pictures) {
-    return <p>Loading...</p>;
+    mutate(apartment._id);
   }
 
   return (
-    <Card key={apartment._id}>
-      {
-        <div className="overflow-hidden w-fill h-64 rounded-lg">
-          {apartment.pictures && apartment.pictures.length > 0 ? (
-            <img
-              className="w-full h-full object-cover object-center"
-              src={`http://localhost:8080/${apartment.pictures[0]}`}
-              alt={apartment.name}
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gray-300">
-              <p>No Image Available</p>
-            </div>
-          )}
+    <Card>
+      <div className="relative -mt-4 -mx-4 h-64 rounded-t-lg overflow-hidden">
+        {apartment.pictures && apartment.pictures.length > 0 ? (
+          <img
+            className="w-full h-full object-cover object-center"
+            src={`${BASE_URL}/${apartment.pictures[0]}`}
+            alt={apartment.name}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gray-300 dark:bg-gray-700">
+            <p>No Image Available</p>
+          </div>
+        )}
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent px-4 pt-12 pb-3">
+          <h1 className="text-white font-semibold text-lg leading-tight">
+            {apartment.name}
+          </h1>
         </div>
-      }
-      <header className="space-y-2">
-        <h1 className="font-medium">{apartment.name}</h1>
-        <p className="text-gray-500">{`Maksimalan broj gostiju: ${apartment.guests}`}</p>
-      </header>
-      <div className="space-x-1 mt-5">
+      </div>
+
+      <p className="text-gray-500 dark:text-gray-400">
+        Maksimalan broj gostiju: <strong className="text-blue-950 dark:text-gray-100">{apartment.guests}</strong>
+      </p>
+
+      <div className="flex gap-2">
         <Link
           to={`/edit-apartments/${apartment._id}`}
-          className="text-white bg-blue-600 px-6 py-3 border rounded-md hover:bg-blue-700 text-xl"
+          className="flex-1 text-center border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700"
         >
           Uredi
         </Link>
         <button
           onClick={onDeleteHandler}
-          className="text-blue-400 text-xl hover:text-blue-700 hover:cursor-pointer"
+          disabled={isPending}
+          className="flex-1 text-center border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-50 disabled:opacity-50 dark:border-gray-600 dark:hover:bg-gray-700"
         >
-          Obrisi
+          {isPending ? "Brisanje..." : "Obriši"}
         </button>
       </div>
+      {isError && (
+        <p className="text-red-600 dark:text-red-400">{error.message}</p>
+      )}
     </Card>
   );
 };

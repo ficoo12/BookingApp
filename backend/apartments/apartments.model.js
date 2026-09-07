@@ -18,9 +18,9 @@ const apartmentsSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    price: {
-      type: [Number],
-      required: true,
+    priceList_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "PriceList",
     },
     features: {
       type: [String],
