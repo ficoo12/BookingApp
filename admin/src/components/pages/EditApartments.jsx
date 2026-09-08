@@ -369,7 +369,12 @@ const EditApartments = () => {
   if (isPending) return <p>Loading apartment...</p>;
   if (isError) return <p>{error.message}</p>;
 
-  return <EditApartmentsForm apartment={apartment} key={apartment._id} />;
+  return (
+    <EditApartmentsForm
+      apartment={apartment}
+      key={apartment._id + apartment.updatedAt}
+    />
+  );
 };
 
 export default EditApartments;
