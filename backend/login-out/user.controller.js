@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 const JWT_SECRET = process.env.SECRET_KEY;
 
@@ -13,7 +14,8 @@ const loginUser = async (req, res) => {
     if (!user) {
       return res.status(404).send({ message: "User not Found!" });
     }
-    if (user.password !== password) {
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
       return res.status(401).send({ message: "Invalid password!" });
     }
     const payload = {

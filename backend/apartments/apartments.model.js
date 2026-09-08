@@ -39,7 +39,8 @@ const apartmentsSchema = new mongoose.Schema(
       default: false,
     },
     user_id: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
       required: true,
     },
     bookedDates: [

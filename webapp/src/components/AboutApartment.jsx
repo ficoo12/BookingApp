@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../utility/config";
 import { format, differenceInDays } from "date-fns";
 import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
@@ -34,7 +35,7 @@ const AboutApartment = () => {
   useEffect(() => {
     const fetchApartmentData = async () => {
       const response = await fetch(
-        `http://localhost:8080/api/apartments/${params.id}`
+        `${BASE_URL}/api/apartments/${params.id}`
       );
       const apartmentData = await response.json();
       setApartmentData(apartmentData);
@@ -48,7 +49,7 @@ const AboutApartment = () => {
     }
     const getTheTotalPrice = async () => {
       const response = await fetch(
-        `http://localhost:8080/api/priceList/${apartmentData[0]?.priceList_id}/quote`,
+        `${BASE_URL}/api/priceList/${apartmentData[0]?.priceList_id}/quote`,
         {
           method: "POST",
           body: JSON.stringify({ startDate, endDate }),
@@ -103,7 +104,7 @@ const AboutApartment = () => {
                     <div key={index} className="keen-slider__slide">
                       <img
                         className="w-full h-full object-cover object-center lg:rounded-lg"
-                        src={`http://localhost:8080/${picture}`}
+                        src={`${BASE_URL}/${picture}`}
                         alt={apartment.name}
                       />
                     </div>

@@ -7,6 +7,7 @@ import {
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { useSearchCriteria } from "../hooks/useSearchCriteria";
+import { BASE_URL } from "../utility/config";
 
 const PaymentPage = () => {
   const [guestName, setGuestName] = useState("");
@@ -23,7 +24,7 @@ const PaymentPage = () => {
   useEffect(() => {
     const fetchApartmentData = async () => {
       const response = await fetch(
-        `http://localhost:8080/api/apartments/${params.id}`
+        `${BASE_URL}/api/apartments/${params.id}`
       );
       const apartmentData = await response.json();
       setApartmentData(apartmentData);
@@ -37,7 +38,7 @@ const PaymentPage = () => {
     }
     const getTheTotalPrice = async () => {
       const response = await fetch(
-        `http://localhost:8080/api/priceList/${apartmentData[0]?.priceList_id}/quote`,
+        `${BASE_URL}/api/priceList/${apartmentData[0]?.priceList_id}/quote`,
         {
           method: "POST",
           body: JSON.stringify({ startDate, endDate }),
@@ -62,7 +63,7 @@ const PaymentPage = () => {
       return;
     }
     try {
-      const response = await fetch(`http://localhost:8080/api/reservations`, {
+      const response = await fetch(`${BASE_URL}/api/reservations`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -120,7 +121,7 @@ const PaymentPage = () => {
                   <div className="flex items-center gap-4">
                     <img
                       className="w-36 h-auto rounded-lg"
-                      src={`http://localhost:8080/${apartment.pictures[0]}`}
+                      src={`${BASE_URL}/${apartment.pictures[0]}`}
                     ></img>
                     <div>
                       <p className="text-lg font-bold">{apartment.name}</p>

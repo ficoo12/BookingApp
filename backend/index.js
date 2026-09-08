@@ -16,13 +16,20 @@ const storage = multer.diskStorage({
 module.exports = { storage };
 
 const app = express();
+
+const defaultOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:5175",
+];
+const envOrigins = (process.env.CLIENT_URLS || "")
+  .split(",")
+  .map((url) => url.trim())
+  .filter(Boolean);
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "http://localhost:5175",
-    ],
+    origin: [...defaultOrigins, ...envOrigins],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   })
 );
@@ -32,7 +39,6 @@ const port = process.env.PORT || 8080;
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
-const userRoutes = require("./users/users.route");
 const apartmentsRouter = require("./apartments/apartments.route");
 const reservationsRoutes = require("./reservations/reservations.route");
 const loginoutRoutes = require("./login-out/user.route");
@@ -41,7 +47,6 @@ const priceListRoutes = require("./priceList/pricelist.route");
 
 app.use("/api/apartments", apartmentsRouter);
 app.use("/api/reservations", reservationsRoutes);
-app.use("/api/users", userRoutes);
 app.use("/api/user", loginoutRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/pricelist", priceListRoutes);

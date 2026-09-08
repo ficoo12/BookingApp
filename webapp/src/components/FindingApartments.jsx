@@ -4,6 +4,7 @@ import { DateRangePicker } from "react-date-range";
 import { format } from "date-fns";
 import { CalendarDateRangeIcon, UserIcon } from "@heroicons/react/24/solid";
 import LOGO from "../assets/LOGO.svg";
+import { BASE_URL } from "../utility/config";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import Carousel from "./Carousel";
@@ -58,7 +59,7 @@ const FindingApartments = () => {
     const fetchApartments = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/api/apartments/available?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}&guests=${guests}`,
+          `${BASE_URL}/api/apartments/available?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}&guests=${guests}`,
           { signal: controller.signal }
         );
 
@@ -170,7 +171,7 @@ const FindingApartments = () => {
                     <img
                       key={picture}
                       className="rounded-lg"
-                      src={`http://localhost:8080/${picture}`}
+                      src={`${BASE_URL}/${picture}`}
                     ></img>
                   ))}
                 </Carousel>
