@@ -1,16 +1,26 @@
 import { Form, NavLink } from "react-router-dom";
 import { useTheme } from "../../utility/theme";
-
+import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import { useState } from "react";
 // "/" needs `end`, otherwise it matches every nested route and stays active.
-const linkClass = ({ isActive }) =>
+
+const subLinkClass = ({ isActive }) =>
   [
     "block rounded-md px-4 py-2 text-sm font-medium transition-colors",
     isActive
       ? "bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300"
       : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100",
   ].join(" ");
+const mainLinkClass = ({ isActive }) =>
+  [
+    "block rounded-md px-4 py-2 text-lg font-medium transition-colors",
+    isActive
+      ? "bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300"
+      : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100",
+  ].join(" ");
 
 const MainNavigation = () => {
+  const [openDropdown, setOpenDropdown] = useState(null);
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === "dark";
 
@@ -24,37 +34,100 @@ const MainNavigation = () => {
       <nav className="flex-1 px-3">
         <ul className="space-y-1">
           <li>
-            <NavLink end to="/" className={linkClass}>
-              Početna
+            <NavLink end to="/" className={mainLinkClass}>
+              Nadzorna ploča
             </NavLink>
           </li>
+          <div
+            className={`transition-all duration-300 ${
+              openDropdown === "apartments"
+                ? "max-h-[231px]"
+                : "max-h-[40px] overflow-hidden"
+            }`}
+          >
+            <div
+              className="flex justify-between text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100 rounded-md px-4 py-2 text-lg font-medium"
+              onClick={() =>
+                setOpenDropdown(
+                  openDropdown === "apartments" ? null : "apartments"
+                )
+              }
+            >
+              <p>Apartmani</p>
+              <ChevronDownIcon
+                className={`w-6 transition-transform duration-300 ${
+                  openDropdown === "apartments" ? "rotate-180" : "rotate-0"
+                }`}
+              />
+            </div>
+            <li
+              className={
+                openDropdown === "apartments" ? "opacity-100" : "opacity-0"
+              }
+            >
+              <NavLink to="/apartments" className={subLinkClass}>
+                Popis Apartmana
+              </NavLink>
+            </li>
+            <li
+              className={` transition-opacity duration-300 ${
+                openDropdown ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              <NavLink to="/new-apartments" className={subLinkClass}>
+                Dodaj Apartman
+              </NavLink>
+            </li>
+          </div>
+          <div
+            className={`transition-all duration-300 ${
+              openDropdown === "priceList"
+                ? "max-h-[231px]"
+                : "max-h-[40px] overflow-hidden"
+            }`}
+          >
+            <div
+              className="flex justify-between text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100 rounded-md px-4 py-2 text-lg font-medium"
+              onClick={() =>
+                setOpenDropdown(
+                  openDropdown === "priceList" ? null : "priceList"
+                )
+              }
+            >
+              <p>Cjenici</p>
+              <ChevronDownIcon
+                className={`w-6 transition-transform duration-300 ${
+                  openDropdown === "priceList" ? "rotate-180" : "rotate-0"
+                }`}
+              />
+            </div>
+            <li
+              className={` transition-opacity duration-300 ${
+                openDropdown === "priceList" ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              <NavLink to="/pricelists" className={subLinkClass}>
+                Popis Cjenika
+              </NavLink>
+            </li>
+            <li
+              className={` transition-opacity duration-300 ${
+                openDropdown === "priceList" ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              <NavLink to="/new-pricelist" className={subLinkClass}>
+                Dodaj Cjenik
+              </NavLink>
+            </li>
+          </div>
+
           <li>
-            <NavLink to="/apartments" className={linkClass}>
-              Svi Aparmani
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/new-apartments" className={linkClass}>
-              Dodaj Apartman
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/pricelists" className={linkClass}>
-              Svi Cjenici
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/new-pricelist" className={linkClass}>
-              Dodaj Cjenik
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/reservations" className={linkClass}>
+            <NavLink to="/reservations" className={mainLinkClass}>
               Rezervacije
             </NavLink>
           </li>
           <li>
-            <NavLink to="/messages" className={linkClass}>
+            <NavLink to="/messages" className={mainLinkClass}>
               Poruke
             </NavLink>
           </li>

@@ -1,5 +1,5 @@
 import { Form, useActionData, useNavigation } from "react-router-dom";
-
+import LoadingCircleSpinner from "../animations/LoadingCircleSpinner";
 function Login() {
   const data = useActionData();
   const navigation = useNavigation();
@@ -50,9 +50,13 @@ function Login() {
           </div>
           <button
             disabled={isSubmitting}
-            className="bg-sky-600 text-white px-6 py-4 rounded-lg text-md hover:bg-sky-900 dark:bg-sky-700 dark:hover:bg-sky-800"
+            className="bg-sky-600 text-white px-6 py-3 rounded-lg text-md hover:bg-sky-900 dark:bg-sky-700 dark:hover:bg-sky-800 w-xl"
           >
-            {isSubmitting ? "U tijeku" : "Login"}
+            {isSubmitting ? (
+              <LoadingCircleSpinner></LoadingCircleSpinner>
+            ) : (
+              "Prijavite se"
+            )}
           </button>
         </Form>
       </div>
