@@ -93,10 +93,10 @@ const EditPriceListForm = ({ priceList }) => {
       <div className="container max-w-screen-lg mx-auto">
         <div>
           <h2 className="font-semibold text-xl text-gray-600 dark:text-gray-300">
-            Uređivanje cjenika
+            Edit price list
           </h2>
           <p className="text-gray-500 mb-6 dark:text-gray-400">
-            Izmjenite informacije koje želite i zatim spremite promjene.
+            Change the details you want, then save your changes.
           </p>
           <form
             className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 space-y-5 dark:bg-gray-800 dark:shadow-black/40"
@@ -104,7 +104,7 @@ const EditPriceListForm = ({ priceList }) => {
           >
             <div className="md:col-span-5">
               <label className="text-black dark:text-gray-200">
-                Definirajte ime cjenika
+                Price list name
               </label>
               <input
                 className="h-10 border border-gray-200 mt-1 rounded px-4 w-full bg-gray-50 text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
@@ -112,7 +112,7 @@ const EditPriceListForm = ({ priceList }) => {
                 name="priceListName"
                 value={priceListName}
                 onChange={onNameChangeHandler}
-                placeholder="Dvosobni apartman cjenik"
+                placeholder="Two-bedroom apartment price list"
                 required
               />
             </div>
@@ -120,21 +120,21 @@ const EditPriceListForm = ({ priceList }) => {
             <div className="md:col-span-5">
               <div className="flex justify-between items-center">
                 <label className="text-black dark:text-gray-200">
-                  Rasponi cijena
+                  Price ranges
                 </label>
                 <button
                   type="button"
                   onClick={onAddRangeHandler}
                   className="border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 dark:text-gray-200"
                 >
-                  Dodaj raspon +
+                  Add range +
                 </button>
               </div>
 
               {periods.length === 0 && (
                 <p className="text-gray-500 mt-2 dark:text-gray-400">
-                  Nema definiranih raspona. Kliknite &quot;Definiraj
-                  raspon&quot; za dodavanje.
+                  No ranges defined. Click &quot;Add range&quot; to add
+                  one.
                 </p>
               )}
 
@@ -146,7 +146,7 @@ const EditPriceListForm = ({ priceList }) => {
                   >
                     <div>
                       <label className="text-black dark:text-gray-200 text-sm">
-                        Od datuma
+                        From date
                       </label>
                       <input
                         className="h-10 border border-gray-200 mt-1 rounded px-4 w-full bg-gray-50 text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
@@ -164,7 +164,7 @@ const EditPriceListForm = ({ priceList }) => {
                     </div>
                     <div>
                       <label className="text-black dark:text-gray-200 text-sm">
-                        Do datuma
+                        To date
                       </label>
                       <input
                         className="h-10 border border-gray-200 mt-1 rounded px-4 w-full bg-gray-50 text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
@@ -182,7 +182,7 @@ const EditPriceListForm = ({ priceList }) => {
                     </div>
                     <div>
                       <label className="text-black dark:text-gray-200 text-sm">
-                        Cijena po noćenju
+                        Price per night
                       </label>
                       <input
                         className="h-10 border border-gray-200 mt-1 rounded px-4 w-full bg-gray-50 text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
@@ -205,7 +205,7 @@ const EditPriceListForm = ({ priceList }) => {
                       onClick={() => onRemovePeriodHandler(index)}
                       className="h-10 border border-gray-300 rounded-md px-4 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 dark:text-gray-200"
                     >
-                      Ukloni
+                      Remove
                     </button>
                   </div>
                 ))}
@@ -214,7 +214,7 @@ const EditPriceListForm = ({ priceList }) => {
 
             {error && (
               <p className="text-red-600 dark:text-red-400">
-                Unesite ime cjenika i barem jedan potpuno popunjen raspon.
+                Enter a price list name and at least one fully completed range.
               </p>
             )}
             {isSubmitError && (
@@ -227,7 +227,7 @@ const EditPriceListForm = ({ priceList }) => {
               type="submit"
               disabled={isPending}
             >
-              {isPending ? "Spremanje..." : "Spremi promjene"}
+              {isPending ? "Saving..." : "Save changes"}
             </button>
           </form>
         </div>

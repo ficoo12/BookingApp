@@ -23,15 +23,15 @@ export default function ConfirmationPage() {
         <h1 className="text-2xl font-bold mt-4">{apartmentName}</h1>
         <p className="text-xl font-semibold mt-2">{totalPrice}$</p>
         <p className="mt-5 text-slate-600">
-          Dragi {guestName}, vaša rezervacija je uspiješna. Potvrdu o
-          rezervaciji i sve potrebne informacije Vam stižu uskoro na mail{" "}
+          Dear {guestName}, your reservation was successful. Your booking
+          confirmation and all the details you need will arrive shortly at{" "}
           <span className="font-medium">{guestEmail}</span>.
         </p>
         <Link
           to="/"
           className="inline-block mt-6 bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600"
         >
-          Natrag na početnu
+          Back to home
         </Link>
       </div>
     </div>

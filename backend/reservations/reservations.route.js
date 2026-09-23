@@ -5,15 +5,16 @@ const {
   getSingleReservation,
   deleteReservation,
 } = require("./reservations.controller.js");
+const verifyToken = require("../middleware/verifyToken.js");
 
 const router = express.Router();
 
 router.post("/", addReservation);
 
-router.get("/", allReservations);
+router.get("/", verifyToken, allReservations);
 
-router.get("/:id", getSingleReservation);
+router.get("/:id", verifyToken, getSingleReservation);
 
-router.delete("/:id", deleteReservation);
+router.delete("/:id", verifyToken, deleteReservation);
 
 module.exports = router;

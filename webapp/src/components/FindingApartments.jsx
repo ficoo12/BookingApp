@@ -15,7 +15,7 @@ const FindingApartments = () => {
   const { startDate, endDate, guests, setCriteria, query, isSearchActive } =
     useSearchCriteria();
 
-  // Ostaje lokalno: čisto UI stanje, nema smisla u URL-u.
+  // Stays local: pure UI state that has no place in the URL.
   const [openDateRange, setOpenDateRange] = useState(false);
   const [openGuests, setOpenGuests] = useState(false);
   const [apartments, setApartments] = useState([]);
@@ -26,7 +26,7 @@ const FindingApartments = () => {
     setOpenGuests((prev) => !prev);
   };
 
-  // replace: true -> pomicanje po kalendaru ne stvara novi history unos
+  // replace: true -> moving around the calendar doesn't create a new history entry
   const handleChange = (ranges) => {
     setCriteria(ranges.selection);
   };
@@ -39,8 +39,8 @@ const FindingApartments = () => {
     setCriteria({ guests: Number(e.target.value) });
   };
 
-  // replace: false -> Search gura novi history unos,
-  // pa "back" vraća na prethodnu pretragu.
+  // replace: false -> Search pushes a new history entry,
+  // so "back" returns to the previous search.
   const findApartments = () => {
     setCriteria({ startDate, endDate, guests }, { replace: false });
   };
@@ -49,8 +49,8 @@ const FindingApartments = () => {
     navigate(`/more-info/${id}?${query}`);
   };
 
-  // Dohvat ovisi o URL-u, ne o kliku na gumb.
-  // Zato se rezultati vrate i kad korisnik dođe natrag na ovu rutu.
+  // Fetching depends on the URL, not on the button click.
+  // That's why results come back when the user returns to this route.
   useEffect(() => {
     if (!isSearchActive) return;
 
@@ -90,10 +90,10 @@ const FindingApartments = () => {
 
         <div className="container mx-auto">
           <h1 className="text-white text-5xl font-semibold md:text-7xl">
-            Pronađite svoj apartman iz snova
+            Find your dream apartment
           </h1>
           <h2 className="text-white text-xl pt-5">
-            Pregledajte vrhunske apartmane i pronađite savršen odmor za sebe!
+            Browse top apartments and find the perfect getaway for you!
           </h2>
           <div className="flex flex-wrap lg:flex-nowrap lg:w-full lg:space-y-0 bg-amber-500 w-fit px-4 py-5 rounded-lg space-x-2 mx-auto space-y-4 mt-10">
             <div className="w-full">
@@ -157,7 +157,7 @@ const FindingApartments = () => {
       <div className="flex justify-center flex-wrap gap-5 mt-12">
         {apartments.length === 0 ? (
           <p className="text-center mt-30 bg-white px-10 py-10 rounded-lg shadow-md">
-            Odaberite datume kako bi započeli pretraživanje
+            Select dates to start searching
           </p>
         ) : (
           apartments.map((apartment) => (
@@ -179,13 +179,13 @@ const FindingApartments = () => {
 
               <h4 className="text-3xl font-semibold mt-4">{apartment.name}</h4>
               <p className="text-gray-500">
-                Maks broj gostiju: {apartment.guests}
+                Max guests: {apartment.guests}
               </p>
               <button
                 onClick={() => goToMoreInfoHandler(apartment._id)}
                 className="text-white bg-blue-600 px-6 py-3 rounded-md hover:bg-blue-700 text-xl"
               >
-                Pogledaj detalje
+                View details
               </button>
             </div>
           ))

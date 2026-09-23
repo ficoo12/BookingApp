@@ -13,7 +13,7 @@ function Login() {
           Login form
         </h2>
         <p className="text-gray-500 mb-6 dark:text-gray-400">
-          Ulogirajte se kako bi mogli upravljati svojim objektom
+          Log in to manage your property
         </p>
         <Form
           method="POST"
@@ -55,7 +55,7 @@ function Login() {
             {isSubmitting ? (
               <LoadingCircleSpinner></LoadingCircleSpinner>
             ) : (
-              "Prijavite se"
+              "Log in"
             )}
           </button>
         </Form>

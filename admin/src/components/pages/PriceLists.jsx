@@ -20,17 +20,17 @@ const PriceLists = () => {
   return (
     <div className="container mx-auto">
       <h1 className="font-semibold text-xl text-gray-600 dark:text-gray-300">
-        Svi cjenici
+        All price lists
       </h1>
 
       {priceLists.length === 0 && (
         <p className="mt-5 text-gray-600 dark:text-gray-400">
-          Još nema cjenika.
+          No price lists yet.
         </p>
       )}
 
       {priceLists.length > 0 && (
-        <div className="flex flex-wrap justify-center gap-4 mt-5">
+        <div className="flex flex-wrap justify-left gap-4 mt-5">
           {priceLists.map((priceList) => (
             <PriceListItem key={priceList._id} priceList={priceList} />
           ))}

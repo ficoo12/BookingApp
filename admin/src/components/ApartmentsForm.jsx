@@ -115,11 +115,11 @@ const ApartmentsForm = () => {
       <div className="container max-w-screen-lg mx-auto">
         <div>
           <h2 className="font-semibold text-xl text-gray-600 dark:text-gray-300">
-            Dodajte novi apartman
+            Add a new apartment
           </h2>
           <p className="text-gray-500 mb-6 dark:text-gray-400">
-            Popunite sve informacije kako bi mogli dodati još jedan apartman za
-            svoj objekt.
+            Fill in all the details to add another apartment to your
+            property.
           </p>
           <form
             className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 space-y-5 dark:bg-gray-800 dark:shadow-black/40"
@@ -128,7 +128,7 @@ const ApartmentsForm = () => {
           >
             <div className="md:col-span-5">
               <label className=" text-black dark:text-gray-200">
-                Unesite naziv apartmana
+                Enter the apartment name
               </label>
               <input
                 className="h-10 border border-gray-200 mt-1 rounded px-4 w-full bg-gray-50 text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
@@ -142,11 +142,11 @@ const ApartmentsForm = () => {
             </div>
             <div className="md:col-span-5">
               <label className="text-black dark:text-gray-200">
-                Unesite opis apartmana
+                Enter the apartment description
               </label>
               <textarea
                 name="desc"
-                placeholder="Apartman sa pogledom na more..."
+                placeholder="Apartment with a sea view..."
                 className="h-50 border border-gray-200 mt-1 rounded px-4 w-full bg-gray-50 text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
                 value={desc}
                 onChange={onDescChangeHandler}
@@ -155,7 +155,7 @@ const ApartmentsForm = () => {
             </div>
             <div className="md:col-span-5">
               <label className=" text-black dark:text-gray-200">
-                Odaberite značajke
+                Select features
               </label>
               <div className="text-gray-400 space-x-5 dark:text-gray-300">
                 {APARTMENT_FEATURES.map((feature) => (
@@ -172,13 +172,13 @@ const ApartmentsForm = () => {
                 ))}
               </div>
               <p className="text-black dark:text-gray-200">
-                Selektirane značajke: {JSON.stringify(features)}
+                Selected features: {JSON.stringify(features)}
               </p>
             </div>
 
             <div className="md:col-span-5">
               <label className=" text-black dark:text-gray-200">
-                Unesite maksimalan broj gostiju
+                Enter the maximum number of guests
               </label>
               <input
                 className="h-10 border border-gray-200 mt-1 rounded px-4 w-full bg-gray-50 text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
@@ -193,7 +193,7 @@ const ApartmentsForm = () => {
 
             <div className="md:col-span-5">
               <label className=" text-black dark:text-gray-200">
-                Unesite tip apartmana
+                Enter the apartment type
               </label>
               <input
                 className="h-10 border border-gray-200 mt-1 rounded px-4 w-full bg-gray-50 text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
@@ -201,13 +201,13 @@ const ApartmentsForm = () => {
                 onChange={onTypeChangeHandler}
                 type="text"
                 name="type"
-                placeholder="Trosobni apartman"
+                placeholder="Three-bedroom apartment"
                 required
               ></input>
             </div>
             <div className="md:col-span-5">
               <label className=" text-black dark:text-gray-200">
-                Odaberite cjenik
+                Select a price list
               </label>
               <select
                 className="h-10 border border-gray-200 mt-1 rounded px-4 w-full bg-gray-50 text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
@@ -217,7 +217,7 @@ const ApartmentsForm = () => {
                 required
               >
                 <option value="" disabled>
-                  Odaberite cjenik
+                  Select a price list
                 </option>
                 {priceLists.map((priceList) => (
                   <option key={priceList._id} value={priceList._id}>
@@ -228,7 +228,7 @@ const ApartmentsForm = () => {
             </div>
             <div className="md:col-span-5">
               <label className=" text-black dark:text-gray-200">
-                Prenesite fotografije
+                Upload photos
               </label>
               <input
                 className="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter file:py-3 file:px-5 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter  bg-gray-50 text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
@@ -242,7 +242,7 @@ const ApartmentsForm = () => {
             </div>
             <div className="md:col-span-5">
               <label className=" text-black dark:text-gray-200">
-                Ažurirajte dostupnost
+                Update availability
               </label>
               <select
                 className="h-10 border border-gray-200 mt-1 rounded px-4 w-full bg-gray-50 text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
@@ -258,7 +258,7 @@ const ApartmentsForm = () => {
 
             {error && (
               <p className="text-red-600 dark:text-red-400">
-                Popunite sva obavezna polja.
+                Please fill in all required fields.
               </p>
             )}
             {isSubmitError && (
@@ -271,7 +271,7 @@ const ApartmentsForm = () => {
               type="submit"
               disabled={isPending}
             >
-              {isPending ? "Dodavanje..." : "Dodaj apartman"}
+              {isPending ? "Adding..." : "Add apartment"}
             </button>
           </form>
         </div>

@@ -8,7 +8,7 @@ const addContact = async (req, res) => {
     const newContact = await Contact(contact);
     await newContact.save();
     res.status(200).send({
-      message: "Poruka je uspješno poslana",
+      message: "Message sent successfully",
       contact: newContact,
     });
   } catch (error) {

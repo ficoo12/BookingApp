@@ -18,6 +18,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { queryClient } from "./utility/queryClient";
 import { ThemeProvider } from "./utility/theme";
+import { ConfirmDeleteProvider } from "./components/UI/ConfirmDeleteModal";
 
 // The root is pathless so it can hold the session for both branches: it keeps
 // id "root" for useRouteLoaderData, while the two layouts below decide whether
@@ -100,7 +101,9 @@ function App() {
   return (
     <ThemeProvider>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
+        <ConfirmDeleteProvider>
+          <RouterProvider router={router} />
+        </ConfirmDeleteProvider>
         <ReactQueryDevtools initialIsOpen={false}></ReactQueryDevtools>
       </QueryClientProvider>
     </ThemeProvider>

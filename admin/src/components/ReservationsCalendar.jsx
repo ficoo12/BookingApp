@@ -7,7 +7,7 @@ import {
   getDay,
   differenceInCalendarDays,
 } from "date-fns";
-import { hr } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./ReservationsCalendar.css";
 
@@ -16,34 +16,34 @@ import "./ReservationsCalendar.css";
 const localizer = dateFnsLocalizer({
   format,
   parse,
-  startOfWeek: (date) => startOfWeek(date, { locale: hr }),
+  startOfWeek: (date) => startOfWeek(date, { locale: enUS }),
   getDay,
-  locales: { hr },
+  locales: { "en-US": enUS },
 });
 
 const formats = {
-  monthHeaderFormat: "LLLL yyyy.",
+  monthHeaderFormat: "LLLL yyyy",
   agendaHeaderFormat: ({ start, end }, culture, loc) =>
-    `${loc.format(start, "d. MMM yyyy.", culture)} – ${loc.format(
+    `${loc.format(start, "MMM d, yyyy", culture)} – ${loc.format(
       end,
-      "d. MMM yyyy.",
+      "MMM d, yyyy",
       culture
     )}`,
-  agendaDateFormat: "EEE d. MMM",
+  agendaDateFormat: "EEE MMM d",
 };
 
 const messages = {
-  today: "Danas",
-  previous: "Nazad",
-  next: "Naprijed",
-  month: "Mjesec",
-  agenda: "Popis",
-  date: "Datum",
-  time: "Vrijeme",
-  event: "Rezervacija",
-  allDay: "cijeli dan",
-  noEventsInRange: "Nema rezervacija u ovom razdoblju.",
-  showMore: (count) => `+ još ${count}`,
+  today: "Today",
+  previous: "Back",
+  next: "Next",
+  month: "Month",
+  agenda: "List",
+  date: "Date",
+  time: "Time",
+  event: "Reservation",
+  allDay: "all day",
+  noEventsInRange: "No reservations in this period.",
+  showMore: (count) => `+ ${count} more`,
 };
 
 const APARTMENT_COLORS = [
@@ -66,7 +66,7 @@ const buildApartmentColors = (reservations) => {
   }
 
   const sorted = [...names.entries()].sort(([, a], [, b]) =>
-    a.localeCompare(b, "hr")
+    a.localeCompare(b, "en")
   );
 
   return new Map(
@@ -78,16 +78,16 @@ const buildApartmentColors = (reservations) => {
 };
 
 const formatRange = (start, end) =>
-  `${format(start, "d. MMM yyyy.", { locale: hr })} – ${format(
+  `${format(start, "MMM d, yyyy", { locale: enUS })} – ${format(
     end,
-    "d. MMM yyyy.",
-    { locale: hr }
+    "MMM d, yyyy",
+    { locale: enUS }
   )}`;
 
 const nightsBetween = (start, end) =>
   Math.max(differenceInCalendarDays(end, start), 0);
 
-const nightsLabel = (nights) => `${nights} ${nights === 1 ? "noć" : "noći"}`;
+const nightsLabel = (nights) => `${nights} ${nights === 1 ? "night" : "nights"}`;
 
 const ReservationsCalendar = ({ reservations }) => {
   const [selected, setSelected] = useState(null);
@@ -106,7 +106,7 @@ const ReservationsCalendar = ({ reservations }) => {
         return {
           id: reservation._id,
           title: `${reservation.guestName} · ${
-            reservation.apartment?.name ?? "Obrisan apartman"
+            reservation.apartment?.name ?? "Deleted apartment"
           }`,
           start,
           end,
@@ -132,7 +132,7 @@ const ReservationsCalendar = ({ reservations }) => {
   const tooltipAccessor = useCallback(
     (event) =>
       `${event.resource.guestName}\n${
-        event.resource.apartment?.name ?? "Obrisan apartman"
+        event.resource.apartment?.name ?? "Deleted apartment"
       }\n${formatRange(event.start, event.end)}`,
     []
   );
@@ -169,7 +169,7 @@ const ReservationsCalendar = ({ reservations }) => {
 
       <Calendar
         localizer={localizer}
-        culture="hr"
+        culture="en-US"
         events={events}
         messages={messages}
         formats={formats}
@@ -189,7 +189,7 @@ const ReservationsCalendar = ({ reservations }) => {
             <div>
               <p className="text-lg font-semibold">{selected.guestName}</p>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                {selected.apartment?.name ?? "Obrisan apartman"}
+                {selected.apartment?.name ?? "Deleted apartment"}
               </p>
             </div>
             <button
@@ -197,12 +197,12 @@ const ReservationsCalendar = ({ reservations }) => {
               onClick={() => setSelected(null)}
               className="rounded-md px-2 py-1 text-sm text-gray-500 hover:bg-gray-100 hover:cursor-pointer dark:text-gray-400 dark:hover:bg-gray-700"
             >
-              Zatvori
+              Close
             </button>
           </div>
           <dl className="mt-4 grid gap-x-8 gap-y-2 text-sm sm:grid-cols-2">
             <div>
-              <dt className="text-gray-500 dark:text-gray-400">Termin</dt>
+              <dt className="text-gray-500 dark:text-gray-400">Dates</dt>
               <dd>
                 {formatRange(
                   new Date(selected.startDate),
@@ -219,7 +219,7 @@ const ReservationsCalendar = ({ reservations }) => {
               </dd>
             </div>
             <div>
-              <dt className="text-gray-500 dark:text-gray-400">Broj gostiju</dt>
+              <dt className="text-gray-500 dark:text-gray-400">Number of guests</dt>
               <dd>{selected.numberOfGuests}</dd>
             </div>
             <div>
@@ -231,7 +231,7 @@ const ReservationsCalendar = ({ reservations }) => {
               </dd>
             </div>
             <div>
-              <dt className="text-gray-500 dark:text-gray-400">Telefon</dt>
+              <dt className="text-gray-500 dark:text-gray-400">Phone</dt>
               <dd>
                 <a
                   className="underline"
@@ -243,7 +243,7 @@ const ReservationsCalendar = ({ reservations }) => {
             </div>
             <div>
               <dt className="text-gray-500 dark:text-gray-400">
-                Ukupna cijena
+                Total price
               </dt>
               <dd>{selected.totalPrice}€</dd>
             </div>

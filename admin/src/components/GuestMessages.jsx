@@ -27,14 +27,14 @@ const GuestMessages = () => {
 
   return (
     <div className="container mx-auto max-w-3xl">
-      <h1>Poruke</h1>
+      <h1>Messages</h1>
       <p className="text-gray-500 dark:text-gray-400 mt-1">
-        Upiti poslani putem kontakt forme.
+        Inquiries sent through the contact form.
       </p>
 
       {messages.length === 0 ? (
         <p className="mt-5 text-gray-600 dark:text-gray-400">
-          Još nema primljenih poruka.
+          No messages received yet.
         </p>
       ) : (
         <div className="mt-5 space-y-4">

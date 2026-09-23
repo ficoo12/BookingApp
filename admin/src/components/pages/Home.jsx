@@ -39,7 +39,7 @@ const Home = () => {
   return (
     <div className=" max-w-4xl  mx-auto">
       <div>
-        <h1>Rezervacije:</h1>
+        <h1>Reservations:</h1>
         <div className="flex gap-4 mt-5">
           {reservationsPending && <p>Loading...</p>}
           {isReservationsError && <p>{reservationsError.message}</p>}
@@ -56,23 +56,23 @@ const Home = () => {
                   {format(reservation.startDate, "MMM dd, yyyy")} -
                   {format(reservation.endDate, "MMM dd, yyyy")}
                 </p>
-                <p>Broj gostiju: {reservation.numberOfGuests}</p>
-                <p>Ukupna cijena: {reservation.totalPrice}€</p>
+                <p>Number of guests: {reservation.numberOfGuests}</p>
+                <p>Total price: {reservation.totalPrice}€</p>
               </div>
 
               <p></p>
               <p>
-                Apartman: {reservation.apartment?.name ?? "Obrisan apartman"}
+                Apartment: {reservation.apartment?.name ?? "Deleted apartment"}
               </p>
             </div>
           ))}
         </div>
         <Link to="/reservations" className="underline mt-5">
-          Sve rezervacije
+          All reservations
         </Link>
       </div>
       <div className="space-y-4 ">
-        <h1 className="mt-5">Dodani apartmani:</h1>
+        <h1 className="mt-5">Added apartments:</h1>
         {apartmentsPending && <p>Loading apartments...</p>}
         {isApartmentsError && <p>{apartmentsError.message}</p>}
         {apartments?.map((apartment) => {
@@ -83,31 +83,31 @@ const Home = () => {
             >
               <p className="text-4xl font-bold">{apartment.name}</p>
               <p>
-                <span className="text-xl font-semibold">Tip apartmana:</span>{" "}
+                <span className="text-xl font-semibold">Apartment type:</span>{" "}
                 {apartment.type}
               </p>
               <p>
-                <span className="text-xl font-semibold">Opis apartmana:</span>{" "}
+                <span className="text-xl font-semibold">
+                  Apartment description:
+                </span>{" "}
                 {apartment.desc}
               </p>
               <p>
                 {" "}
                 <span className="text-xl font-semibold">
-                  Maksimalan broj gostiju:
+                  Maximum number of guests:
                 </span>{" "}
                 {apartment.guests}
               </p>
               <p>
                 {" "}
-                <span className="text-xl font-semibold">
-                  Fotografije apartmana:
-                </span>
+                <span className="text-xl font-semibold">Apartment photos:</span>
               </p>
               <div className="flex flex-wrap gap-4">
                 {apartment.pictures.map((picture) => (
                   <img
                     key={picture}
-                    className="max-w-40 h-auto rounded-lg"
+                    className="max-w-40 h-auto rounded-lg object-cover"
                     src={`${BASE_URL}/${picture}`}
                   ></img>
                 ))}

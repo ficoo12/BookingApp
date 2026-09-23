@@ -1,3 +1,4 @@
+const isAvailable = require("../helperfunction/isAvailable");
 const Apartments = require("./apartments.model");
 
 const createApartments = async (req, res) => {
@@ -15,7 +16,7 @@ const createApartments = async (req, res) => {
     const newApartment = await Apartments(apartment);
     await newApartment.save();
     res.status(200).send({
-      message: "Novi apartman je uspješno kreiran",
+      message: "New apartment created successfully",
       apartment: newApartment,
     });
   } catch (error) {
@@ -52,13 +53,6 @@ const getSingleAparment = async (req, res) => {
   }
 };
 
-const isAvailable = (apartment, startDate, endDate) => {
-  return !apartment.bookedDates.some(
-    (booking) =>
-      new Date(booking.startDate) <= new Date(endDate) &&
-      new Date(booking.endDate) >= new Date(startDate)
-  );
-};
 const availableApartments = async (req, res) => {
   try {
     const { startDate, endDate, guests } = req.query;
@@ -183,7 +177,7 @@ const deleteApartmentImages = async (req, res) => {
       return;
     }
     res.status(200).send({
-      message: "Fotografije su uspiješno obrisane",
+      message: "Photos deleted successfully",
       apartment: updatedApartment,
     });
   } catch (error) {

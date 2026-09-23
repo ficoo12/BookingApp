@@ -105,7 +105,7 @@ const PaymentPage = () => {
         <Link to={`/more-info/${params.id}?${query}`}>
           <ChevronLeftIcon className="w-8 h-auto text-black"></ChevronLeftIcon>
         </Link>
-        <h1 className="text-3xl font-bold">Potvrdite svoju rezervaciju</h1>
+        <h1 className="text-3xl font-bold">Confirm your reservation</h1>
       </div>
       <div className="container  mx-auto space-y-10 mt-10 lg:flex justify-between lg:mt-30">
         <div className="space-y-10">

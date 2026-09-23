@@ -26,7 +26,7 @@ const contactUs = () => {
       });
       const result = await response.json();
       if (response.ok) {
-        setText("Poruka upsiješno poslana, odgovor će te dobiti na email!");
+        setText("Message sent successfully, you'll receive a reply by email!");
         setName("");
         setEmail("");
         setMessage("");
@@ -34,7 +34,7 @@ const contactUs = () => {
         e.target.email.value = "";
         e.target.message.value = "";
       } else {
-        setText(result.error || "Poruka nije poslana");
+        setText(result.error || "Message was not sent");
       }
     } catch (error) {
       console.error(error);
@@ -50,8 +50,8 @@ const contactUs = () => {
             Contact Us
           </h1>
           <p className="mx-auto text-base leading-relaxed lg:w-2/3 text-slate-600 font-medium">
-            Obratite nam se za bilo kakva pitanja vezana uz smještaj ili
-            okolinu!.
+            Reach out to us with any questions about the accommodation or
+            the surrounding area!
           </p>
         </div>
 

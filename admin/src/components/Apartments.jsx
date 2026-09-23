@@ -18,7 +18,7 @@ function Apartments() {
   if (isError) return <p>{error.message}</p>;
 
   return (
-    <div className="flex justify-center gap-4 flex-wrap">
+    <div className="flex justify-left gap-4 flex-wrap">
       {apartments.map((apartment) => (
         <ApartmentItem key={apartment._id} apartment={apartment} />
       ))}

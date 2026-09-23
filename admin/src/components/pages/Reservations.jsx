@@ -6,8 +6,8 @@ import { queryKeys } from "../../utility/queryKeys";
 import ReservationsCalendar from "../ReservationsCalendar";
 
 const VIEWS = [
-  { id: "calendar", label: "Kalendar" },
-  { id: "list", label: "Popis" },
+  { id: "calendar", label: "Calendar" },
+  { id: "list", label: "List" },
 ];
 
 const Reservations = () => {
@@ -29,12 +29,12 @@ const Reservations = () => {
   return (
     <div className="container mx-auto">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1>Sve rezervacije</h1>
+        <h1>All reservations</h1>
         {/* radiogroup rather than buttons: the two are one exclusive choice, so
             arrow keys should move between them and the state be announced. */}
         <div
           role="radiogroup"
-          aria-label="Prikaz rezervacija"
+          aria-label="Reservations view"
           className="inline-flex rounded-md border border-gray-300 p-1 dark:border-gray-700"
         >
           {VIEWS.map(({ id, label }) => (
@@ -59,7 +59,7 @@ const Reservations = () => {
 
       {reservations.length === 0 && (
         <p className="mt-5 text-gray-600 dark:text-gray-400">
-          Još nema rezervacija.
+          No reservations yet.
         </p>
       )}
 
@@ -84,11 +84,11 @@ const Reservations = () => {
                   {format(reservation.startDate, "MMM dd, yyyy")} -
                   {format(reservation.endDate, "MMM dd, yyyy")}
                 </p>
-                <p>Broj gostiju: {reservation.numberOfGuests}</p>
-                <p>Ukupna cijena: {reservation.totalPrice}€</p>
+                <p>Number of guests: {reservation.numberOfGuests}</p>
+                <p>Total price: {reservation.totalPrice}€</p>
               </div>
               <p>
-                Apartman: {reservation.apartment?.name ?? "Obrisan apartman"}
+                Apartment: {reservation.apartment?.name ?? "Deleted apartment"}
               </p>
             </div>
           ))}

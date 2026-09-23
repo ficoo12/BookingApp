@@ -4,9 +4,11 @@ import { deleteApartment } from "../utility/api";
 import { BASE_URL } from "../utility/config";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../utility/queryKeys";
+import { useConfirmDelete } from "./UI/ConfirmDeleteModal";
 
 const ApartmentItem = ({ apartment }) => {
   const queryClient = useQueryClient();
+  const confirmDelete = useConfirmDelete();
 
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: deleteApartment,
@@ -15,13 +17,15 @@ const ApartmentItem = ({ apartment }) => {
     },
   });
 
-  function onDeleteHandler() {
+  async function onDeleteHandler() {
+    const confirmed = await confirmDelete(apartment.name);
+    if (!confirmed) return;
     mutate(apartment._id);
   }
 
   return (
     <Card>
-      <div className="relative -mt-4 -mx-4 h-64 rounded-t-lg overflow-hidden">
+      <div className="relative -mt-4 -mx-4 h-64 rounded-t-lg overflow-hidden ">
         {apartment.pictures && apartment.pictures.length > 0 ? (
           <img
             className="w-full h-full object-cover object-center"
@@ -41,7 +45,10 @@ const ApartmentItem = ({ apartment }) => {
       </div>
 
       <p className="text-gray-500 dark:text-gray-400">
-        Maksimalan broj gostiju: <strong className="text-blue-950 dark:text-gray-100">{apartment.guests}</strong>
+        Maximum number of guests:{" "}
+        <strong className="text-blue-950 dark:text-gray-100">
+          {apartment.guests}
+        </strong>
       </p>
 
       <div className="flex gap-2">
@@ -49,14 +56,14 @@ const ApartmentItem = ({ apartment }) => {
           to={`/edit-apartments/${apartment._id}`}
           className="flex-1 text-center border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700"
         >
-          Uredi
+          Edit
         </Link>
         <button
           onClick={onDeleteHandler}
           disabled={isPending}
           className="flex-1 text-center border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-50 disabled:opacity-50 dark:border-gray-600 dark:hover:bg-gray-700"
         >
-          {isPending ? "Brisanje..." : "Obriši"}
+          {isPending ? "Deleting..." : "Delete"}
         </button>
       </div>
       {isError && (

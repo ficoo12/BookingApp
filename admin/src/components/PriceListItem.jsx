@@ -4,9 +4,11 @@ import { format } from "date-fns";
 import { deletePriceList } from "../utility/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../utility/queryKeys";
+import { useConfirmDelete } from "./UI/ConfirmDeleteModal";
 
 const PriceListItem = ({ priceList }) => {
   const queryClient = useQueryClient();
+  const confirmDelete = useConfirmDelete();
 
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: deletePriceList,
@@ -15,7 +17,9 @@ const PriceListItem = ({ priceList }) => {
     },
   });
 
-  function onDeleteHandler() {
+  async function onDeleteHandler() {
+    const confirmed = await confirmDelete(priceList.priceListName);
+    if (!confirmed) return;
     mutate(priceList._id);
   }
 
@@ -24,16 +28,14 @@ const PriceListItem = ({ priceList }) => {
       <h2 className="font-semibold text-lg">{priceList.priceListName}</h2>
 
       {priceList.periods.length === 0 ? (
-        <p className="text-gray-500 dark:text-gray-400">
-          Nema definiranih raspona.
-        </p>
+        <p className="text-gray-500 dark:text-gray-400">No ranges defined.</p>
       ) : (
         <ul className="space-y-1">
           {priceList.periods.map((period, index) => (
             <li key={index} className="text-gray-500 dark:text-gray-400">
               {format(period.startDate, "MMM dd, yyyy")} -{" "}
-              {format(period.endDate, "MMM dd, yyyy")}: {period.pricePerNight}
-              € / noć
+              {format(period.endDate, "MMM dd, yyyy")}: {period.pricePerNight}€
+              / night
             </li>
           ))}
         </ul>
@@ -44,14 +46,14 @@ const PriceListItem = ({ priceList }) => {
           to={`/edit-pricelist/${priceList._id}`}
           className="flex-1 text-center border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700"
         >
-          Uredi
+          Edit
         </Link>
         <button
           onClick={onDeleteHandler}
           disabled={isPending}
           className="flex-1 text-center border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-50 disabled:opacity-50 dark:border-gray-600 dark:hover:bg-gray-700"
         >
-          {isPending ? "Brisanje..." : "Obriši"}
+          {isPending ? "Deleting..." : "Delete"}
         </button>
       </div>
       {isError && (

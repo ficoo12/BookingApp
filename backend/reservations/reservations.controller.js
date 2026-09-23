@@ -4,14 +4,8 @@ const PriceList = require("../priceList/pricelist.model");
 const {
   calculateTotalPrice,
 } = require("../helperfunction/calculateTotalPrice");
-
-const isAvailable = (apartment, startDate, endDate) => {
-  return !apartment.bookedDates.some(
-    (booking) =>
-      new Date(booking.startDate) <= new Date(endDate) &&
-      new Date(booking.endDate) >= new Date(startDate)
-  );
-};
+const removeBookedPeriod = require("../helperfunction/removeBookedPeriod");
+const isAvailable = require("../helperfunction/isAvailable");
 
 const addReservation = async (req, res) => {
   try {
@@ -129,14 +123,17 @@ const getSingleReservation = async (req, res) => {
 const deleteReservation = async (req, res) => {
   try {
     const { id } = req.params;
-    const deleteReservation = await Reservation.findByIdAndDelete(id);
-    if (!deleteReservation) {
+    const reservation = await Reservations.findByIdAndDelete(id);
+
+    await removeBookedPeriod(reservation);
+
+    if (!reservation) {
       res.status(404).send({ message: "reservation is not found" });
       return;
     }
     res.status(200).send({
-      message: "Apartment deleted successfully",
-      reservation: deleteReservation,
+      message: "Reservation deleted successfully",
+      reservation,
     });
   } catch (error) {
     console.error("Error deleting a reservation", error);

@@ -35,7 +35,7 @@ const MainNavigation = () => {
         <ul className="space-y-1">
           <li>
             <NavLink end to="/" className={mainLinkClass}>
-              Nadzorna ploča
+              Dashboard
             </NavLink>
           </li>
           <div
@@ -53,7 +53,7 @@ const MainNavigation = () => {
                 )
               }
             >
-              <p>Apartmani</p>
+              <p>Apartments</p>
               <ChevronDownIcon
                 className={`w-6 transition-transform duration-300 ${
                   openDropdown === "apartments" ? "rotate-180" : "rotate-0"
@@ -66,7 +66,7 @@ const MainNavigation = () => {
               }
             >
               <NavLink to="/apartments" className={subLinkClass}>
-                Popis Apartmana
+                Apartment List
               </NavLink>
             </li>
             <li
@@ -75,7 +75,7 @@ const MainNavigation = () => {
               }`}
             >
               <NavLink to="/new-apartments" className={subLinkClass}>
-                Dodaj Apartman
+                Add Apartment
               </NavLink>
             </li>
           </div>
@@ -94,7 +94,7 @@ const MainNavigation = () => {
                 )
               }
             >
-              <p>Cjenici</p>
+              <p>Price Lists</p>
               <ChevronDownIcon
                 className={`w-6 transition-transform duration-300 ${
                   openDropdown === "priceList" ? "rotate-180" : "rotate-0"
@@ -107,7 +107,7 @@ const MainNavigation = () => {
               }`}
             >
               <NavLink to="/pricelists" className={subLinkClass}>
-                Popis Cjenika
+                Price List Overview
               </NavLink>
             </li>
             <li
@@ -116,19 +116,19 @@ const MainNavigation = () => {
               }`}
             >
               <NavLink to="/new-pricelist" className={subLinkClass}>
-                Dodaj Cjenik
+                Add Price List
               </NavLink>
             </li>
           </div>
 
           <li>
             <NavLink to="/reservations" className={mainLinkClass}>
-              Rezervacije
+              Reservations
             </NavLink>
           </li>
           <li>
             <NavLink to="/messages" className={mainLinkClass}>
-              Poruke
+              Messages
             </NavLink>
           </li>
         </ul>
@@ -143,7 +143,7 @@ const MainNavigation = () => {
           className="flex w-full items-center gap-2 rounded-md px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 hover:cursor-pointer dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
         >
           <span aria-hidden="true">{isDark ? "☀️" : "🌙"}</span>
-          {isDark ? "Svijetla tema" : "Tamna tema"}
+          {isDark ? "Light theme" : "Dark theme"}
         </button>
         <Form action="/logout" method="POST">
           <button className="w-full rounded-md bg-blue-500 px-4 py-2 text-sm font-bold text-white hover:bg-blue-600 hover:cursor-pointer dark:bg-blue-600 dark:hover:bg-blue-700">

@@ -4,8 +4,8 @@
 export const APARTMENT_FEATURES = [
   "Wifi",
   "Free parking",
-  "Bazen",
+  "Pool",
   " Pet friendly",
-  "Pogled na more",
-  "Pogled na prirodu",
+  "Sea view",
+  "Nature view",
 ];

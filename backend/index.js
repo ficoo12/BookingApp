@@ -65,5 +65,5 @@ async function main() {
 }
 
 app.listen(port, () => {
-  console.log(`Pokrenuta je express aplikacija na portu ${port}`);
+  console.log(`Express app is running on port ${port}`);
 });

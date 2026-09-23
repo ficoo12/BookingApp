@@ -133,9 +133,9 @@ const AboutApartment = () => {
                   <h2 className="text-2xl font-medium pt-1">
                     {apartment.type}
                   </h2>
-                  <h3>Maksimalan broj gostiju: {apartment.guests}</h3>
+                  <h3>Maximum number of guests: {apartment.guests}</h3>
                   <div className="mt-5">
-                    <p className="text-lg mb-2">Značajke apartmana:</p>
+                    <p className="text-lg mb-2">Apartment features:</p>
                     <div className="space-y-2 font-bold">
                       {apartment.features.map((feature) => {
                         return (
@@ -147,7 +147,7 @@ const AboutApartment = () => {
                     </div>
                   </div>
                   <div className="bg-gray-400 text-white p-4 shadow-sm rounded-lg lg:max-w-lg lg:mt-5">
-                    <p className="text-3xl font-medium">Opis apartmana</p>
+                    <p className="text-3xl font-medium">Apartment description</p>
                     <p className="pt-2">{partOfDescription}...</p>
                     <button onClick={toggleModal} className="underline pt-2">
                       Show more
@@ -155,7 +155,7 @@ const AboutApartment = () => {
                   </div>
                   <div>
                     <h4 className="text-2xl font-bold mt-5">
-                      {totalNights} noći u {apartment.name}
+                      {totalNights} {totalNights === 1 ? "night" : "nights"} in {apartment.name}
                     </h4>
                     <p className="text-slate-600">
                       {formattedStartDate} - {formattedEndDate}
@@ -169,7 +169,7 @@ const AboutApartment = () => {
                 <div className="bg-white px-4 py-4 rounded-lg h-fit lg:mt-10 w-fit border border-gray-400">
                   <div className="flex items-center justify-between shadow-lg bg-white rounded-lg px-4 py-2 gap-2">
                     <GiftIcon className="w-12 h-auto"></GiftIcon>
-                    <p>Imate sreće! Ovaj apartman je često rezerviran</p>
+                    <p>You're in luck! This apartment is frequently booked</p>
                   </div>
                   <div>
                     <div className="flex justify-between mt-3">
@@ -183,14 +183,14 @@ const AboutApartment = () => {
                       </div>
                     </div>
 
-                    <p className="mt-2">Broj gostiju: {guests}</p>
+                    <p className="mt-2">Number of guests: {guests}</p>
                   </div>
                   <div className="flex flex-col items-center gap-y-2 mt-5">
                     <button
                       onClick={() => goToPaymentHandler(apartment._id)}
                       className="bg-sky-400 px-5 py-3 font-medium rounded-md hover:bg-sky-500 hover:cursor-pointer w-full"
                     >
-                      Napravi razervaciju
+                      Make a reservation
                     </button>
                     <p>You won't be charged yet</p>
                   </div>
@@ -210,7 +210,7 @@ const AboutApartment = () => {
                       className="w-10 h-auto"
                     ></XMarkIcon>
                     <div>
-                      <p className="text-4xl font-medium">O apartmanu</p>
+                      <p className="text-4xl font-medium">About the apartment</p>
                       <p className="mt-5">{apartment.desc}</p>
                     </div>
                   </div>

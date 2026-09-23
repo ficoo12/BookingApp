@@ -11,11 +11,11 @@ const parseDate = (value, fallback) => {
 };
 
 /**
- * Datumi i broj gostiju žive u URL-u (?checkIn=&checkOut=&guests=),
- * a ne u state-u pojedine komponente.
+ * Dates and guest count live in the URL (?checkIn=&checkOut=&guests=),
+ * not in any single component's state.
  *
- * Zato preživljavaju unmount komponente, back/forward navigaciju,
- * refresh stranice i dijeljenje linka.
+ * That's why they survive component unmounts, back/forward navigation,
+ * page refreshes and link sharing.
  */
 export function useSearchCriteria() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -25,7 +25,7 @@ export function useSearchCriteria() {
 
     const startDate = parseDate(searchParams.get("checkIn"), today);
 
-    // Barem jedna noć, inače je totalNights 0 i cijena ispadne 0.
+    // At least one night, otherwise totalNights is 0 and the price comes out as 0.
     const fallbackEnd = addDays(startDate, 1);
     let endDate = parseDate(searchParams.get("checkOut"), fallbackEnd);
     if (endDate <= startDate) {
@@ -58,7 +58,7 @@ export function useSearchCriteria() {
     [setSearchParams]
   );
 
-  // Gotov query string za linkove između ruta.
+  // Ready-made query string for links between routes.
   const query = useMemo(() => {
     const params = new URLSearchParams();
     params.set("checkIn", format(criteria.startDate, FMT));
