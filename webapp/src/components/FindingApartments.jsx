@@ -12,8 +12,16 @@ import { useSearchCriteria } from "../hooks/useSearchCriteria";
 
 const FindingApartments = () => {
   const navigate = useNavigate();
-  const { startDate, endDate, guests, setCriteria, query, isSearchActive } =
-    useSearchCriteria();
+  const {
+    startDate,
+    endDate,
+    checkIn,
+    checkOut,
+    guests,
+    setCriteria,
+    query,
+    isSearchActive,
+  } = useSearchCriteria();
 
   // Stays local: pure UI state that has no place in the URL.
   const [openDateRange, setOpenDateRange] = useState(false);
@@ -59,7 +67,7 @@ const FindingApartments = () => {
     const fetchApartments = async () => {
       try {
         const response = await fetch(
-          `${BASE_URL}/api/apartments/available?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}&guests=${guests}`,
+          `${BASE_URL}/api/apartments/available?startDate=${checkIn}&endDate=${checkOut}&guests=${guests}`,
           { signal: controller.signal }
         );
 
@@ -79,7 +87,7 @@ const FindingApartments = () => {
     fetchApartments();
 
     return () => controller.abort();
-  }, [startDate, endDate, guests, isSearchActive]);
+  }, [checkIn, checkOut, guests, isSearchActive]);
 
   return (
     <div>

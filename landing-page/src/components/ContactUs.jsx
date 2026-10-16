@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const contactUs = () => {
+const ContactUs = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -126,4 +126,4 @@ const contactUs = () => {
     </section>
   );
 };
-export default contactUs;
+export default ContactUs;

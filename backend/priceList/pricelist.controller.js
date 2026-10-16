@@ -1,7 +1,9 @@
+const mongoose = require("mongoose");
 const PriceList = require("./pricelist.model");
 const {
   calculateTotalPrice,
 } = require("../helperfunction/calculateTotalPrice");
+const parseCalendarDate = require("../helperfunction/parseCalendarDate");
 
 const createPriceList = async (req, res) => {
   try {
@@ -114,11 +116,21 @@ const quotePriceList = async (req, res) => {
         .json({ error: "startDate and endDate are required" });
     }
 
-    const parsedStart = new Date(startDate);
-    const parsedEnd = new Date(endDate);
+    const parsedStart = parseCalendarDate(startDate);
+    const parsedEnd = parseCalendarDate(endDate);
 
     if (isNaN(parsedStart.getTime()) || isNaN(parsedEnd.getTime())) {
       return res.status(400).json({ error: "Invalid date format" });
+    }
+
+    if (parsedEnd <= parsedStart) {
+      return res
+        .status(400)
+        .json({ error: "Check-out must be after check-in" });
+    }
+
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(404).json({ error: "Price list not found" });
     }
 
     const priceList = await PriceList.findById(id);

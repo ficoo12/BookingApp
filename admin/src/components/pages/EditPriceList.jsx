@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { format } from "date-fns";
 import { getPriceList, updatePriceList } from "../../utility/api";
 import { queryKeys } from "../../utility/queryKeys";
-
-const toDateInputValue = (date) => format(new Date(date), "yyyy-MM-dd");
+import BackwardButton from "../UI/BackwardButton";
+import { toDateInputValue } from "../../utility/dates";
 
 const EditPriceListForm = ({ priceList }) => {
   const navigator = useNavigate();
@@ -27,9 +26,7 @@ const EditPriceListForm = ({ priceList }) => {
     },
   });
 
-  const [priceListName, setPriceListName] = useState(
-    priceList.priceListName
-  );
+  const [priceListName, setPriceListName] = useState(priceList.priceListName);
   const [periods, setPeriods] = useState(
     priceList.periods.map((period) => ({
       startDate: toDateInputValue(period.startDate),
@@ -92,12 +89,14 @@ const EditPriceListForm = ({ priceList }) => {
     <div className="min-h-screen p-6 bg-transparent flex items-center justify-center">
       <div className="container max-w-screen-lg mx-auto">
         <div>
+          <BackwardButton btnText="All Price lists" route="/pricelists" />
           <h2 className="font-semibold text-xl text-gray-600 dark:text-gray-300">
             Edit price list
           </h2>
           <p className="text-gray-500 mb-6 dark:text-gray-400">
             Change the details you want, then save your changes.
           </p>
+
           <form
             className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 space-y-5 dark:bg-gray-800 dark:shadow-black/40"
             onSubmit={onSubmitHandler}
@@ -133,8 +132,7 @@ const EditPriceListForm = ({ priceList }) => {
 
               {periods.length === 0 && (
                 <p className="text-gray-500 mt-2 dark:text-gray-400">
-                  No ranges defined. Click &quot;Add range&quot; to add
-                  one.
+                  No ranges defined. Click &quot;Add range&quot; to add one.
                 </p>
               )}
 

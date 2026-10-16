@@ -58,17 +58,25 @@ export function useSearchCriteria() {
     [setSearchParams]
   );
 
+  // Calendar dates as "yyyy-MM-dd". Send these to the API rather than
+  // startDate.toISOString(): the ISO string of a local midnight is the
+  // previous day in UTC anywhere east of UTC, which broke pricing.
+  const checkIn = format(criteria.startDate, FMT);
+  const checkOut = format(criteria.endDate, FMT);
+
   // Ready-made query string for links between routes.
   const query = useMemo(() => {
     const params = new URLSearchParams();
-    params.set("checkIn", format(criteria.startDate, FMT));
-    params.set("checkOut", format(criteria.endDate, FMT));
+    params.set("checkIn", checkIn);
+    params.set("checkOut", checkOut);
     params.set("guests", String(criteria.guests));
     return params.toString();
-  }, [criteria]);
+  }, [checkIn, checkOut, criteria.guests]);
 
   return {
     ...criteria,
+    checkIn,
+    checkOut,
     setCriteria,
     query,
     isSearchActive: searchParams.has("checkIn"),

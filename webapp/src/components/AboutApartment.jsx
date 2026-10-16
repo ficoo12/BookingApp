@@ -8,7 +8,6 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   ShareIcon,
-  GiftIcon,
   UserIcon,
   XMarkIcon,
 } from "@heroicons/react/24/solid";
@@ -17,7 +16,8 @@ import { useSearchCriteria } from "../hooks/useSearchCriteria";
 const AboutApartment = () => {
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
-  const { startDate, endDate, guests, query } = useSearchCriteria();
+  const { startDate, endDate, checkIn, checkOut, guests, query } =
+    useSearchCriteria();
 
   const formattedStartDate = format(startDate, "MMM dd, yyyy");
   const formattedEndDate = format(endDate, "MMM dd, yyyy");
@@ -27,32 +27,36 @@ const AboutApartment = () => {
     loop: true,
     slides: { perView: 1 },
   });
+
   const [apartmentData, setApartmentData] = useState([]);
   const [totalPrice, setTotalPrice] = useState();
-
   const params = useParams();
-  console.log(apartmentData);
+
   useEffect(() => {
     const fetchApartmentData = async () => {
-      const response = await fetch(
-        `${BASE_URL}/api/apartments/${params.id}`
-      );
+      const response = await fetch(`${BASE_URL}/api/apartments/${params.id}`);
       const apartmentData = await response.json();
       setApartmentData(apartmentData);
     };
     fetchApartmentData();
   }, [params.id]);
 
+  const partOfDescription =
+    apartmentData.length > 0
+      ? apartmentData[0].desc.slice(0, 300)
+      : "no text provided";
+
+  const priceListId = apartmentData[0]?.priceList_id;
   useEffect(() => {
-    if (!apartmentData[0]?.priceList_id) {
+    if (!priceListId) {
       return;
     }
     const getTheTotalPrice = async () => {
       const response = await fetch(
-        `${BASE_URL}/api/priceList/${apartmentData[0]?.priceList_id}/quote`,
+        `${BASE_URL}/api/priceList/${priceListId}/quote`,
         {
           method: "POST",
-          body: JSON.stringify({ startDate, endDate }),
+          body: JSON.stringify({ startDate: checkIn, endDate: checkOut }),
           headers: { "Content-Type": "application/json" },
         }
       );
@@ -66,12 +70,7 @@ const AboutApartment = () => {
     };
 
     getTheTotalPrice();
-  }, [apartmentData[0]?.priceList_id, startDate, endDate]);
-  console.log(totalPrice);
-  const partOfDescription =
-    apartmentData.length > 0
-      ? apartmentData[0].desc.slice(0, 300)
-      : "no text provided";
+  }, [priceListId, checkIn, checkOut]);
 
   const goToPaymentHandler = (id) => {
     navigate(`/payment/${id}?${query}`);
@@ -147,7 +146,9 @@ const AboutApartment = () => {
                     </div>
                   </div>
                   <div className="bg-gray-400 text-white p-4 shadow-sm rounded-lg lg:max-w-lg lg:mt-5">
-                    <p className="text-3xl font-medium">Apartment description</p>
+                    <p className="text-3xl font-medium">
+                      Apartment description
+                    </p>
                     <p className="pt-2">{partOfDescription}...</p>
                     <button onClick={toggleModal} className="underline pt-2">
                       Show more
@@ -155,7 +156,8 @@ const AboutApartment = () => {
                   </div>
                   <div>
                     <h4 className="text-2xl font-bold mt-5">
-                      {totalNights} {totalNights === 1 ? "night" : "nights"} in {apartment.name}
+                      {totalNights} {totalNights === 1 ? "night" : "nights"} in{" "}
+                      {apartment.name}
                     </h4>
                     <p className="text-slate-600">
                       {formattedStartDate} - {formattedEndDate}
@@ -167,10 +169,6 @@ const AboutApartment = () => {
                   </div>
                 </div>
                 <div className="bg-white px-4 py-4 rounded-lg h-fit lg:mt-10 w-fit border border-gray-400">
-                  <div className="flex items-center justify-between shadow-lg bg-white rounded-lg px-4 py-2 gap-2">
-                    <GiftIcon className="w-12 h-auto"></GiftIcon>
-                    <p>You're in luck! This apartment is frequently booked</p>
-                  </div>
                   <div>
                     <div className="flex justify-between mt-3">
                       <div>
@@ -192,7 +190,7 @@ const AboutApartment = () => {
                     >
                       Make a reservation
                     </button>
-                    <p>You won't be charged yet</p>
+                    <p>You will not be charged yet</p>
                   </div>
                   <div className="w-full h-0.5 bg-gray-400 rounded-lg mt-3"></div>
                   <div className="flex justify-between items-center mt-3">
@@ -210,7 +208,9 @@ const AboutApartment = () => {
                       className="w-10 h-auto"
                     ></XMarkIcon>
                     <div>
-                      <p className="text-4xl font-medium">About the apartment</p>
+                      <p className="text-4xl font-medium">
+                        About the apartment
+                      </p>
                       <p className="mt-5">{apartment.desc}</p>
                     </div>
                   </div>

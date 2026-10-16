@@ -1,6 +1,8 @@
 const Apartment = require("../apartments/apartments.model");
+
+// Returns the query so the caller's `await` actually executes it.
 const removeBookedPeriod = (reservation) => {
-  Apartment.updateOne(
+  return Apartment.updateOne(
     { _id: reservation.apartment },
     {
       $pull: {

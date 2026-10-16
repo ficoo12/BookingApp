@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import img1 from "../assets/aboutUs01.jpg";
 import img2 from "../assets/aboutUs02.jpg";
 import img3 from "../assets/aboutUs03.jpg";
 import img4 from "../assets/aboutUs04.jpg";
 
-const aboutUs = () => {
+const AboutUs = () => {
   const [imgSrc, setImgSrc] = useState(img1);
   const changeImage = (e) => {
     const updatedSrc = imgSrc.replace(/(\d)(?=\.\w+$)/, e.target.id);
@@ -19,7 +19,7 @@ const aboutUs = () => {
           <h3 className="text-1xl font-bold uppercase tracking-wide emphasized">
             About us
           </h3>
-          <h2 class="text-5xl font-semibold max-w-4xl">
+          <h2 className="text-5xl font-semibold max-w-4xl">
             Discover the Perfect Blend of Comfort and Elegance at Our Luxury
             Apartments
           </h2>
@@ -92,4 +92,4 @@ const aboutUs = () => {
   );
 };
 
-export default aboutUs;
+export default AboutUs;

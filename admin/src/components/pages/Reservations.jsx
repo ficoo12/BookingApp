@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { getReservations } from "../../utility/api";
 import { queryKeys } from "../../utility/queryKeys";
+import { toLocalDay } from "../../utility/dates";
 import ReservationsCalendar from "../ReservationsCalendar";
 
 const VIEWS = [
@@ -81,8 +82,8 @@ const Reservations = () => {
                 <p>Phone number: {reservation.guestPhoneNumber}</p>
                 <p>Email: {reservation.guestEmail}</p>
                 <p>
-                  {format(reservation.startDate, "MMM dd, yyyy")} -
-                  {format(reservation.endDate, "MMM dd, yyyy")}
+                  {format(toLocalDay(reservation.startDate), "MMM dd, yyyy")} -
+                  {format(toLocalDay(reservation.endDate), "MMM dd, yyyy")}
                 </p>
                 <p>Number of guests: {reservation.numberOfGuests}</p>
                 <p>Total price: {reservation.totalPrice}€</p>

@@ -10,6 +10,7 @@ import {
 import { enUS } from "date-fns/locale";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./ReservationsCalendar.css";
+import { toLocalDay } from "../utility/dates";
 
 // Built once at module scope: the localizer is stateless and rebuilding it on
 // every render would remount the calendar's internals.
@@ -100,8 +101,8 @@ const ReservationsCalendar = ({ reservations }) => {
   const events = useMemo(
     () =>
       reservations.map((reservation) => {
-        const start = new Date(reservation.startDate);
-        const end = new Date(reservation.endDate);
+        const start = toLocalDay(reservation.startDate);
+        const end = toLocalDay(reservation.endDate);
 
         return {
           id: reservation._id,
@@ -205,14 +206,14 @@ const ReservationsCalendar = ({ reservations }) => {
               <dt className="text-gray-500 dark:text-gray-400">Dates</dt>
               <dd>
                 {formatRange(
-                  new Date(selected.startDate),
-                  new Date(selected.endDate)
+                  toLocalDay(selected.startDate),
+                  toLocalDay(selected.endDate)
                 )}{" "}
                 (
                 {nightsLabel(
                   nightsBetween(
-                    new Date(selected.startDate),
-                    new Date(selected.endDate)
+                    toLocalDay(selected.startDate),
+                    toLocalDay(selected.endDate)
                   )
                 )}
                 )

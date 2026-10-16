@@ -4,10 +4,12 @@
 function calculateTotalPrice(priceList, startDate, endDate) {
   let totalPrice = 0;
 
+  // Step in UTC: local-time setDate would shift a night by an hour across a
+  // DST change whenever the server does not run in UTC.
   for (
     let night = new Date(startDate);
     night < endDate;
-    night.setDate(night.getDate() + 1)
+    night.setUTCDate(night.getUTCDate() + 1)
   ) {
     const period = priceList.periods.find(
       (period) =>

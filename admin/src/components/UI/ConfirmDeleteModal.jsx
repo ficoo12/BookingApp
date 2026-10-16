@@ -1,15 +1,6 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { ConfirmContext } from "../contexts/ConfirmContext/ConfirmContext";
 import { createPortal } from "react-dom";
-
-const ConfirmContext = createContext(null);
 
 function isMatch(input, expected) {
   return input.trim() === String(expected).trim();
@@ -170,21 +161,3 @@ export const ConfirmDeleteProvider = ({ children }) => {
     </ConfirmContext.Provider>
   );
 };
-
-function useConfirmContext(hookName) {
-  const context = useContext(ConfirmContext);
-  if (!context) {
-    throw new Error(`${hookName} must be used inside ConfirmDeleteProvider`);
-  }
-  return context;
-}
-
-// Typed confirmation: the caller's word has to be entered exactly.
-export function useConfirmDelete() {
-  return useConfirmContext("useConfirmDelete").confirmDelete;
-}
-
-// Plain yes/no confirmation.
-export function useConfirm() {
-  return useConfirmContext("useConfirm").confirm;
-}

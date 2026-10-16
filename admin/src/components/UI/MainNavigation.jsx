@@ -1,7 +1,7 @@
 import { Form, NavLink } from "react-router-dom";
-import { useTheme } from "../../utility/theme";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
+import { useTheme } from "../contexts/ThemeContext/UseTheme";
 // "/" needs `end`, otherwise it matches every nested route and stays active.
 
 const subLinkClass = ({ isActive }) =>
@@ -42,7 +42,7 @@ const MainNavigation = () => {
             className={`transition-all duration-300 ${
               openDropdown === "apartments"
                 ? "max-h-[231px]"
-                : "max-h-[40px] overflow-hidden"
+                : "max-h-[44px] overflow-hidden"
             }`}
           >
             <div
@@ -83,7 +83,7 @@ const MainNavigation = () => {
             className={`transition-all duration-300 ${
               openDropdown === "priceList"
                 ? "max-h-[231px]"
-                : "max-h-[40px] overflow-hidden"
+                : "max-h-[44px] overflow-hidden"
             }`}
           >
             <div

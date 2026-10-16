@@ -34,6 +34,16 @@ const userSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    // Never send the bcrypt hash (or the unused token field) to a client.
+    // res.json() serializes documents through toJSON, so this covers every
+    // response that includes a user, not just login.
+    toJSON: {
+      transform: (doc, ret) => {
+        delete ret.password;
+        delete ret.token;
+        return ret;
+      },
+    },
   }
 );
 

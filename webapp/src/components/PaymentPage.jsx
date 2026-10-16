@@ -19,7 +19,8 @@ const PaymentPage = () => {
 
   const params = useParams();
   const navigate = useNavigate();
-  const { startDate, endDate, guests, query } = useSearchCriteria();
+  const { startDate, endDate, checkIn, checkOut, guests, query } =
+    useSearchCriteria();
 
   useEffect(() => {
     const fetchApartmentData = async () => {
@@ -32,16 +33,17 @@ const PaymentPage = () => {
     fetchApartmentData();
   }, [params.id]);
 
+  const priceListId = apartmentData[0]?.priceList_id;
   useEffect(() => {
-    if (!apartmentData[0]?.priceList_id) {
+    if (!priceListId) {
       return;
     }
     const getTheTotalPrice = async () => {
       const response = await fetch(
-        `${BASE_URL}/api/priceList/${apartmentData[0]?.priceList_id}/quote`,
+        `${BASE_URL}/api/priceList/${priceListId}/quote`,
         {
           method: "POST",
-          body: JSON.stringify({ startDate, endDate }),
+          body: JSON.stringify({ startDate: checkIn, endDate: checkOut }),
           headers: { "Content-Type": "application/json" },
         }
       );
@@ -55,7 +57,7 @@ const PaymentPage = () => {
     };
 
     getTheTotalPrice();
-  }, [apartmentData[0]?.priceList_id, startDate, endDate]);
+  }, [priceListId, checkIn, checkOut]);
 
   const makeReservation = async () => {
     if (!guestName || !guestEmail || !guestPhone) {
@@ -74,8 +76,8 @@ const PaymentPage = () => {
           guestEmail,
           guestPhoneNumber: guestPhone,
           numberOfGuests: guests,
-          startDate: startDate.toISOString(),
-          endDate: endDate.toISOString(),
+          startDate: checkIn,
+          endDate: checkOut,
           totalPrice,
         }),
       });
@@ -85,7 +87,8 @@ const PaymentPage = () => {
           state: {
             apartmentName: apartmentData[0]?.name,
             apartmentPhoto: apartmentData[0]?.pictures?.[0],
-            totalPrice,
+            // The server recomputes the price; show what it charged.
+            totalPrice: result.reservation.totalPrice,
             guestName,
             guestEmail,
           },

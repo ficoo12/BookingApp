@@ -1,4 +1,5 @@
 const isAvailable = require("../helperfunction/isAvailable");
+const parseCalendarDate = require("../helperfunction/parseCalendarDate");
 const Apartments = require("./apartments.model");
 
 const createApartments = async (req, res) => {
@@ -61,8 +62,8 @@ const availableApartments = async (req, res) => {
       return res.status(400).json({ message: "Missing required parameters" });
     }
 
-    const parsedStart = new Date(startDate);
-    const parsedEnd = new Date(endDate);
+    const parsedStart = parseCalendarDate(startDate);
+    const parsedEnd = parseCalendarDate(endDate);
     const guestCount = parseInt(guests, 10);
 
     if (

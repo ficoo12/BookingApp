@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import {
   deleteApartmentImages,
   getApartment,
@@ -12,7 +11,8 @@ import { queryKeys } from "../../utility/queryKeys";
 import { APARTMENT_FEATURES } from "../../utility/features";
 import { BASE_URL } from "../../utility/config";
 import ImageDropzone from "../UI/ImageDropzone";
-import { useConfirm } from "../UI/ConfirmDeleteModal";
+import { useConfirm } from "../contexts/ConfirmContext/UseConfirms";
+import BackwardButton from "../UI/BackwardButton";
 
 const EditApartmentsForm = ({ apartment }) => {
   const navigator = useNavigate();
@@ -73,7 +73,19 @@ const EditApartmentsForm = ({ apartment }) => {
       });
       setSelectedImages([]);
     },
+    onError: (error) => {
+      console.log(`Failed to delete apartment images: ${error}`);
+    },
   });
+
+  {
+    isDeleteError && (
+      <p className="text text-red-600">
+        {deleteError?.response?.data?.message ||
+          "Unable to delete images. Please try again."}
+      </p>
+    );
+  }
 
   function onNameChangeHandler(e) {
     setName(e.target.value);
@@ -173,14 +185,7 @@ const EditApartmentsForm = ({ apartment }) => {
     >
       <div className="container max-w-screen-lg mx-auto">
         <div>
-          <button
-            type="button"
-            onClick={() => navigator("/apartments")}
-            className="mb-4 flex items-center gap-1 rounded-md px-2 py-1 -ml-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 hover:cursor-pointer dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
-          >
-            <ChevronLeftIcon className="size-4" aria-hidden="true" />
-            Apartments List
-          </button>
+          <BackwardButton btnText="Apartments List" route="/apartments" />
           <h2 className="font-semibold text-xl text-gray-600 dark:text-gray-300">
             Edit apartment
           </h2>
@@ -335,7 +340,7 @@ const EditApartmentsForm = ({ apartment }) => {
                   Uploaded photos:
                 </p>
                 <button
-                  disabled={selectedImages.length === 0}
+                  disabled={selectedImages.length === 0 || isDeletingImages}
                   type="button"
                   onClick={() => onDeleteImagesHandler(selectedImages)}
                   className="bg-red-500 px-3 py-2 rounded-md disabled:opacity-30 enabled:hover:bg-red-600 transition-all ease-in-out duration-200 enabled:hover:cursor-pointer"

@@ -2,108 +2,108 @@
   "priceListName": "Room only",
   "periods": [
     {
-      "startDate": "2026-09-13T22:00:00.000Z",
-      "endDate": "2026-09-30T21:59:59.999Z",
+      "startDate": "2026-09-14",
+      "endDate": "2026-09-30",
       "pricePerNight": 75
     },
     {
-      "startDate": "2026-09-30T22:00:00.000Z",
-      "endDate": "2027-05-31T21:59:59.999Z",
+      "startDate": "2026-10-01",
+      "endDate": "2027-05-31",
       "pricePerNight": 50
     },
     {
-      "startDate": "2027-05-31T22:00:00.000Z",
-      "endDate": "2027-06-30T21:59:59.999Z",
+      "startDate": "2027-06-01",
+      "endDate": "2027-06-30",
       "pricePerNight": 75
     },
     {
-      "startDate": "2027-06-30T22:00:00.000Z",
-      "endDate": "2027-08-31T21:59:59.999Z",
+      "startDate": "2027-07-01",
+      "endDate": "2027-08-31",
       "pricePerNight": 105
     },
     {
-      "startDate": "2027-08-31T22:00:00.000Z",
-      "endDate": "2027-09-30T21:59:59.999Z",
+      "startDate": "2027-09-01",
+      "endDate": "2027-09-30",
       "pricePerNight": 75
     },
     {
-      "startDate": "2027-09-30T22:00:00.000Z",
-      "endDate": "2028-05-31T21:59:59.999Z",
+      "startDate": "2027-10-01",
+      "endDate": "2028-05-31",
       "pricePerNight": 50
     },
     {
-      "startDate": "2028-05-31T22:00:00.000Z",
-      "endDate": "2028-06-30T21:59:59.999Z",
+      "startDate": "2028-06-01",
+      "endDate": "2028-06-30",
       "pricePerNight": 75
     },
     {
-      "startDate": "2028-06-30T22:00:00.000Z",
-      "endDate": "2028-08-31T21:59:59.999Z",
+      "startDate": "2028-07-01",
+      "endDate": "2028-08-31",
       "pricePerNight": 105
     },
     {
-      "startDate": "2028-08-31T22:00:00.000Z",
-      "endDate": "2028-09-30T21:59:59.999Z",
+      "startDate": "2028-09-01",
+      "endDate": "2028-09-30",
       "pricePerNight": 75
     },
     {
-      "startDate": "2028-09-30T22:00:00.000Z",
-      "endDate": "2029-05-31T21:59:59.999Z",
+      "startDate": "2028-10-01",
+      "endDate": "2029-05-31",
       "pricePerNight": 50
     },
     {
-      "startDate": "2029-05-31T22:00:00.000Z",
-      "endDate": "2029-06-30T21:59:59.999Z",
+      "startDate": "2029-06-01",
+      "endDate": "2029-06-30",
       "pricePerNight": 75
     },
     {
-      "startDate": "2029-06-30T22:00:00.000Z",
-      "endDate": "2029-08-31T21:59:59.999Z",
+      "startDate": "2029-07-01",
+      "endDate": "2029-08-31",
       "pricePerNight": 105
     },
     {
-      "startDate": "2029-08-31T22:00:00.000Z",
-      "endDate": "2029-09-30T21:59:59.999Z",
+      "startDate": "2029-09-01",
+      "endDate": "2029-09-30",
       "pricePerNight": 75
     },
     {
-      "startDate": "2029-09-30T22:00:00.000Z",
-      "endDate": "2030-05-31T21:59:59.999Z",
+      "startDate": "2029-10-01",
+      "endDate": "2030-05-31",
       "pricePerNight": 50
     },
     {
-      "startDate": "2030-05-31T22:00:00.000Z",
-      "endDate": "2030-06-30T21:59:59.999Z",
+      "startDate": "2030-06-01",
+      "endDate": "2030-06-30",
       "pricePerNight": 75
     },
     {
-      "startDate": "2030-06-30T22:00:00.000Z",
-      "endDate": "2030-08-31T21:59:59.999Z",
+      "startDate": "2030-07-01",
+      "endDate": "2030-08-31",
       "pricePerNight": 105
     },
     {
-      "startDate": "2030-08-31T22:00:00.000Z",
-      "endDate": "2030-09-30T21:59:59.999Z",
+      "startDate": "2030-09-01",
+      "endDate": "2030-09-30",
       "pricePerNight": 75
     },
     {
-      "startDate": "2030-09-30T22:00:00.000Z",
-      "endDate": "2031-05-31T21:59:59.999Z",
+      "startDate": "2030-10-01",
+      "endDate": "2031-05-31",
       "pricePerNight": 50
     },
     {
-      "startDate": "2031-05-31T22:00:00.000Z",
-      "endDate": "2031-06-30T21:59:59.999Z",
+      "startDate": "2031-06-01",
+      "endDate": "2031-06-30",
       "pricePerNight": 75
     },
     {
-      "startDate": "2031-06-30T22:00:00.000Z",
-      "endDate": "2031-08-31T21:59:59.999Z",
+      "startDate": "2031-07-01",
+      "endDate": "2031-08-31",
       "pricePerNight": 105
     },
     {
-      "startDate": "2031-08-31T22:00:00.000Z",
-      "endDate": "2031-09-13T21:59:59.999Z",
+      "startDate": "2031-09-01",
+      "endDate": "2031-09-13",
       "pricePerNight": 75
     }
   ]

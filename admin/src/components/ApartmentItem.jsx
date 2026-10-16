@@ -4,7 +4,7 @@ import { deleteApartment } from "../utility/api";
 import { BASE_URL } from "../utility/config";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../utility/queryKeys";
-import { useConfirmDelete } from "./UI/ConfirmDeleteModal";
+import { useConfirmDelete } from "./contexts/ConfirmContext/UseConfirms";
 
 const ApartmentItem = ({ apartment }) => {
   const queryClient = useQueryClient();

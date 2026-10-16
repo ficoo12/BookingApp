@@ -1,6 +1,6 @@
 const express = require("express");
 const multer = require("multer");
-const { storage } = require("../index.js");
+const { storage } = require("../upload");
 const verifyToken = require("../middleware/verifyToken.js");
 const upload = multer({ storage: storage });
 const {

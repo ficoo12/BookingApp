@@ -1,10 +1,9 @@
 import Card from "./UI/Card";
 import { Link } from "react-router-dom";
-import { format } from "date-fns";
 import { deletePriceList } from "../utility/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../utility/queryKeys";
-import { useConfirmDelete } from "./UI/ConfirmDeleteModal";
+import { useConfirmDelete } from "./contexts/ConfirmContext/UseConfirms";
 
 const PriceListItem = ({ priceList }) => {
   const queryClient = useQueryClient();
@@ -25,22 +24,7 @@ const PriceListItem = ({ priceList }) => {
 
   return (
     <Card>
-      <h2 className="font-semibold text-lg">{priceList.priceListName}</h2>
-
-      {priceList.periods.length === 0 ? (
-        <p className="text-gray-500 dark:text-gray-400">No ranges defined.</p>
-      ) : (
-        <ul className="space-y-1">
-          {priceList.periods.map((period, index) => (
-            <li key={index} className="text-gray-500 dark:text-gray-400">
-              {format(period.startDate, "MMM dd, yyyy")} -{" "}
-              {format(period.endDate, "MMM dd, yyyy")}: {period.pricePerNight}€
-              / night
-            </li>
-          ))}
-        </ul>
-      )}
-
+      <h2 className="font-semibold text-4xl">{priceList.priceListName}</h2>
       <div className="flex gap-2">
         <Link
           to={`/edit-pricelist/${priceList._id}`}

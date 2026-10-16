@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { getApartments, getReservations } from "../../utility/api";
 import { BASE_URL } from "../../utility/config";
 import { queryKeys } from "../../utility/queryKeys";
+import { toLocalDay } from "../../utility/dates";
 
 const Home = () => {
   const {
@@ -53,8 +54,8 @@ const Home = () => {
                 <p>Phone number: {reservation.guestPhoneNumber}</p>
                 <p>Email: {reservation.guestEmail}</p>
                 <p>
-                  {format(reservation.startDate, "MMM dd, yyyy")} -
-                  {format(reservation.endDate, "MMM dd, yyyy")}
+                  {format(toLocalDay(reservation.startDate), "MMM dd, yyyy")} -
+                  {format(toLocalDay(reservation.endDate), "MMM dd, yyyy")}
                 </p>
                 <p>Number of guests: {reservation.numberOfGuests}</p>
                 <p>Total price: {reservation.totalPrice}€</p>
