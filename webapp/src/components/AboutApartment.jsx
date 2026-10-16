@@ -1,76 +1,29 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { BASE_URL } from "../utility/config";
 import { format, differenceInDays } from "date-fns";
-import "keen-slider/keen-slider.min.css";
-import { useKeenSlider } from "keen-slider/react";
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ShareIcon,
-  UserIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/solid";
+import { ChevronLeftIcon, ShareIcon } from "@heroicons/react/24/solid";
 import { useSearchCriteria } from "../hooks/useSearchCriteria";
+import { useApartment } from "../hooks/useApartment";
+import { usePriceQuote } from "../hooks/usePriceQuote";
+import ImageSlider from "./apartment/ImageSlider";
+import ApartmentInfo from "./apartment/ApartmentInfo";
+import StaySummary from "./apartment/StaySummary";
+import BookingCard from "./apartment/BookingCard";
+import DescriptionModal from "./apartment/DescriptionModal";
 
 const AboutApartment = () => {
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
+  const params = useParams();
   const { startDate, endDate, checkIn, checkOut, guests, query } =
     useSearchCriteria();
+
+  const apartment = useApartment(params.id);
+  const totalPrice = usePriceQuote(apartment?.priceList_id, checkIn, checkOut);
 
   const formattedStartDate = format(startDate, "MMM dd, yyyy");
   const formattedEndDate = format(endDate, "MMM dd, yyyy");
   const totalNights = differenceInDays(endDate, startDate);
-
-  const [sliderRef, instanceRef] = useKeenSlider({
-    loop: true,
-    slides: { perView: 1 },
-  });
-
-  const [apartmentData, setApartmentData] = useState([]);
-  const [totalPrice, setTotalPrice] = useState();
-  const params = useParams();
-
-  useEffect(() => {
-    const fetchApartmentData = async () => {
-      const response = await fetch(`${BASE_URL}/api/apartments/${params.id}`);
-      const apartmentData = await response.json();
-      setApartmentData(apartmentData);
-    };
-    fetchApartmentData();
-  }, [params.id]);
-
-  const partOfDescription =
-    apartmentData.length > 0
-      ? apartmentData[0].desc.slice(0, 300)
-      : "no text provided";
-
-  const priceListId = apartmentData[0]?.priceList_id;
-  useEffect(() => {
-    if (!priceListId) {
-      return;
-    }
-    const getTheTotalPrice = async () => {
-      const response = await fetch(
-        `${BASE_URL}/api/priceList/${priceListId}/quote`,
-        {
-          method: "POST",
-          body: JSON.stringify({ startDate: checkIn, endDate: checkOut }),
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-
-      if (response.ok) {
-        const totalPriceResponse = await response.json();
-        setTotalPrice(totalPriceResponse.totalPrice);
-      } else {
-        console.error(response.body);
-      }
-    };
-
-    getTheTotalPrice();
-  }, [priceListId, checkIn, checkOut]);
 
   const goToPaymentHandler = (id) => {
     navigate(`/payment/${id}?${query}`);
@@ -89,135 +42,37 @@ const AboutApartment = () => {
         <ShareIcon className="w-8 h-auto"></ShareIcon>
       </nav>
       <div className="container mx-auto">
-        {apartmentData.length === 0 ? (
+        {!apartment ? (
           <p className="text-center mt-30">Loading...</p>
         ) : (
-          apartmentData.map((apartment) => (
-            <div key={apartment._id} className="w-full text-black">
-              <div className="relative ">
-                <div
-                  ref={sliderRef}
-                  className="keen-slider h-64 w-full lg:w-full lg:h-96 lg:mt-20"
-                >
-                  {apartment.pictures.map((picture, index) => (
-                    <div key={index} className="keen-slider__slide">
-                      <img
-                        className="w-full h-full object-cover object-center lg:rounded-lg"
-                        src={`${BASE_URL}/${picture}`}
-                        alt={apartment.name}
-                      />
-                    </div>
-                  ))}
-                </div>
-
-                <button
-                  className="hidden absolute left-2 top-1/2 transform -translate-y-1/2 text-white p-2 rounded-full lg:block"
-                  onClick={() => instanceRef.current?.prev()}
-                >
-                  <ChevronLeftIcon className="w-10 h-auto"></ChevronLeftIcon>
-                </button>
-
-                <button
-                  className="hidden absolute right-2 top-1/2 transform -translate-y-1/2 text-white p-2 rounded-full lg:block"
-                  onClick={() => instanceRef.current?.next()}
-                >
-                  <ChevronRightIcon className="w-10 h-auto"></ChevronRightIcon>
-                </button>
+          <div className="w-full text-black">
+            <ImageSlider pictures={apartment.pictures} alt={apartment.name} />
+            <div className="mt-10 lg:flex lg:justify-between">
+              <div>
+                <ApartmentInfo apartment={apartment} onShowMore={toggleModal} />
+                <StaySummary
+                  apartmentName={apartment.name}
+                  totalNights={totalNights}
+                  formattedStartDate={formattedStartDate}
+                  formattedEndDate={formattedEndDate}
+                  guests={guests}
+                />
               </div>
-              <div className="mt-10 lg:flex lg:justify-between">
-                <div>
-                  <h1 className="text-4xl font-semibold pt-2">
-                    {apartment.name}
-                  </h1>
-                  <h2 className="text-2xl font-medium pt-1">
-                    {apartment.type}
-                  </h2>
-                  <h3>Maximum number of guests: {apartment.guests}</h3>
-                  <div className="mt-5">
-                    <p className="text-lg mb-2">Apartment features:</p>
-                    <div className="space-y-2 font-bold">
-                      {apartment.features.map((feature) => {
-                        return (
-                          <p key={feature} className="text-lg">
-                            {feature}
-                          </p>
-                        );
-                      })}
-                    </div>
-                  </div>
-                  <div className="bg-gray-400 text-white p-4 shadow-sm rounded-lg lg:max-w-lg lg:mt-5">
-                    <p className="text-3xl font-medium">
-                      Apartment description
-                    </p>
-                    <p className="pt-2">{partOfDescription}...</p>
-                    <button onClick={toggleModal} className="underline pt-2">
-                      Show more
-                    </button>
-                  </div>
-                  <div>
-                    <h4 className="text-2xl font-bold mt-5">
-                      {totalNights} {totalNights === 1 ? "night" : "nights"} in{" "}
-                      {apartment.name}
-                    </h4>
-                    <p className="text-slate-600">
-                      {formattedStartDate} - {formattedEndDate}
-                    </p>
-                    <div className="flex align-middle">
-                      <UserIcon className="w-8 h-auto"></UserIcon>
-                      <p className="text-slate-600">{guests}</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-white px-4 py-4 rounded-lg h-fit lg:mt-10 w-fit border border-gray-400">
-                  <div>
-                    <div className="flex justify-between mt-3">
-                      <div>
-                        <p className="uppercase font-bold">Check-in</p>
-                        <p>{formattedStartDate}</p>
-                      </div>
-                      <div>
-                        <p className="uppercase font-bold">Checkout</p>
-                        <p>{formattedEndDate}</p>
-                      </div>
-                    </div>
-
-                    <p className="mt-2">Number of guests: {guests}</p>
-                  </div>
-                  <div className="flex flex-col items-center gap-y-2 mt-5">
-                    <button
-                      onClick={() => goToPaymentHandler(apartment._id)}
-                      className="bg-sky-400 px-5 py-3 font-medium rounded-md hover:bg-sky-500 hover:cursor-pointer w-full"
-                    >
-                      Make a reservation
-                    </button>
-                    <p>You will not be charged yet</p>
-                  </div>
-                  <div className="w-full h-0.5 bg-gray-400 rounded-lg mt-3"></div>
-                  <div className="flex justify-between items-center mt-3">
-                    <p className="text-xl font-bold">Total</p>
-                    <p className="text-xl font-bold">{totalPrice}$</p>
-                  </div>
-                </div>
-              </div>
-              {/* Modal */}
-              {modal && (
-                <div className="w-screen h-screen top-0 left-0 right-0 fixed bottom-0 bg-gray-950/60">
-                  <div className="bg-white  max-w-lg h-fit px-5 py-10 rounded-lg mx-auto mt-20">
-                    <XMarkIcon
-                      onClick={toggleModal}
-                      className="w-10 h-auto"
-                    ></XMarkIcon>
-                    <div>
-                      <p className="text-4xl font-medium">
-                        About the apartment
-                      </p>
-                      <p className="mt-5">{apartment.desc}</p>
-                    </div>
-                  </div>
-                </div>
-              )}
+              <BookingCard
+                formattedStartDate={formattedStartDate}
+                formattedEndDate={formattedEndDate}
+                guests={guests}
+                totalPrice={totalPrice}
+                onReserve={() => goToPaymentHandler(apartment._id)}
+              />
             </div>
-          ))
+            {modal && (
+              <DescriptionModal
+                description={apartment.desc}
+                onClose={toggleModal}
+              />
+            )}
+          </div>
         )}
       </div>
     </div>
