@@ -6,7 +6,7 @@ const {
   calculateTotalPrice,
 } = require("../helperfunction/calculateTotalPrice");
 const removeBookedPeriod = require("../helperfunction/removeBookedPeriod");
-const isAvailable = require("../helperfunction/isAvailable");
+const { isAvailable } = require("../helperfunction/isAvailable");
 const parseCalendarDate = require("../helperfunction/parseCalendarDate");
 const claimDates = require("../helperfunction/claimDates");
 

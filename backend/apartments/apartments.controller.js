@@ -1,4 +1,4 @@
-const isAvailable = require("../helperfunction/isAvailable");
+const { isAvailable } = require("../helperfunction/isAvailable");
 const parseCalendarDate = require("../helperfunction/parseCalendarDate");
 const Apartments = require("./apartments.model");
 
